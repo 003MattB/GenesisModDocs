@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Layer.pm</title>
+    <link rev="made" href="mailto:root@localhost"/>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div id="nav-placeholder"></div>
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+    <div class="content container">
+        <p class="mt-5"></p>
+        <h1><a name="name">Layer.pm</a></h1>
+        <p> Used to help with scripts associated with Genesis on actions related to the layer.
+            In this context &quot;Layer&quot; pertains to the matrix, and functions relating to such.
+        </p>
+
+        <hr/>
+
+        <!-- INDEX BEGIN -->
+        <div name="index">
+            <p><a name="__index__"></a></p>
+
+            <ul>
+
+                <li><a href="#name">NAME</a></li>
+                <li><a href="#synopsis">SYNOPSIS</a></li>
+                <ul>
+
+                    <li><a href="#methods">METHODS</a></li>
+                    <ul>
+
+                        <li><a href="#__initializer__">-Initializer-</a></li>
+                        <li><a href="#__getters__">-Getters-</a></li>
+                        <li><a href="#__setters__">-Setters-</a></li>
+                        <li><a href="#__behaviors__">-Behaviors-</a></li>
+                    </ul>
+
+                </ul>
+
+                <li><a href="#dependencies">DEPENDENCIES</a></li>
+                <li><a href="#author">AUTHOR</a></li>
+            </ul>
+
+            <hr name="index"/>
+        </div>
+        <!-- INDEX END -->
+
+
+        <h1><a name="synopsis">SYNOPSIS</a></h1>
+        <pre>
+     ##################                          ##################
+     ################## EXAMPLES OF SIMPLE USAGE ##################
+     ##################                          ##################
+     use Layer;
+     use Job;
+     use Genesis;
+     my $f = new Genesis;
+     my $job = Job-&gt;new(PTX =&gt; $ENV{JOB}, GENESIS =&gt; $f);
+     my $layer = Layer-&gt;new(NAME =&gt; '1a', JOB_MOD=&gt; $job, STEP =&gt; 'pcb');
+     
+     my $side = $layer-&gt;getSide();
+     print &quot;$side\n&quot;; #top
+     
+     #make the layer mixed
+     $layer-&gt;setType(&quot;mixed&quot;);
+     
+     #make it misc
+     $layer-&gt;setContext(&quot;misc&quot;);
+     
+     #make a new layer object
+     $layer = Layer-&gt;new(NAME =&gt; 'd1', JOB_MOD=&gt; $job, STEP =&gt; 'pcb');
+     
+     my $start = $layer-&gt;getStartName();
+     print &quot;$start\n&quot;; #prints a layer name</pre>
+        <p>
+        </p>
+        <h2><a name="methods">METHODS</a></h2>
+        <p>
+        </p>
+        <h3><a name="__initializer__">--Initializer--</a></h3>
+        <dl>
+            <dt><strong><a name="new" class="item"><code>new</code></a></strong></dt>
+
+            <dd>
+                <p><em>new(NAME =&gt; 'layer_name',JOB_MOD=&gt;$job_obj,STEP=&gt;'step_name')</em></p>
+                <p>Creates a new layer object.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <h3><a name="__getters__">--Getters--</a></h3>
+        <dl>
+            <dt><strong><a name="getendname" class="item"><code>getEndName</code></a></strong></dt>
+
+            <dd>
+                <p><em>getEndName()</em></p>
+                <p>Returns the end name of the layer. If the layer type is either drill or rout it will be the name of
+                    another
+                    layer.
+                    Otherwise, it will be an empty string.</p>
+            </dd>
+            <dt><strong><a name="getstartname" class="item"><code>getStartName</code></a></strong></dt>
+
+            <dd>
+                <p><em>getStartName()</em></p>
+                <p>Returns the start name of the layer. If the layer type is either drill or rout it will be the name of
+                    another
+                    layer.
+                    Otherwise, it will be an empty string.</p>
+            </dd>
+            <dt><strong><a name="getpolarity" class="item"><code>getPolarity</code></a></strong></dt>
+
+            <dd>
+                <p><em>getPolarity()</em></p>
+                <p>Returns the polarity of the layer; either &quot;positive&quot; or &quot;negative&quot;.</p>
+            </dd>
+            <dt><strong><a name="gettype" class="item"><code>getType</code></a></strong></dt>
+
+            <dd>
+                <p><em>getType()</em></p>
+                <p>Returns the layer type; either &quot;signal&quot;, &quot;mixed&quot;, &quot;power_ground&quot;,
+                    &quot;solder_mask&quot;,
+                    &quot;silk_screen&quot;, &quot;solder_paste&quot;, &quot;drill&quot;, &quot;rout&quot; or
+                    &quot;document&quot;.</p>
+            </dd>
+            <dt><strong><a name="getrow" class="item"><code>getRow</code></a></strong></dt>
+
+            <dd>
+                <p><em>getRow()</em></p>
+                <p>Returns the layer's row number in the matrix. Indexing starts at 1; so the first layer in the matrix
+                    is row
+                    1.</p>
+            </dd>
+            <dt><strong><a name="getcontext" class="item"><code>getContext</code></a></strong></dt>
+
+            <dd>
+                <p><em>getContext()</em></p>
+                <p>Returns the layer context; either &quot;board&quot; or &quot;misc&quot;.</p>
+            </dd>
+            <dt><strong><a name="getfoilside" class="item"><code>getFoilSide</code></a></strong></dt>
+
+            <dd>
+                <p><em>getFoilSide()</em></p>
+                <p>Returns the layer foil side; either &quot;none&quot;, &quot;top&quot; or &quot;bottom&quot;. Only
+                    copper
+                    layers will be &quot;top&quot; or &quot;bottom&quot; all others will be &quot;none&quot;.</p>
+            </dd>
+            <dt><strong><a name="getsheetside" class="item"><code>getSheetSide</code></a></strong></dt>
+
+            <dd>
+                <p><em>getSheetSide()</em></p>
+                <p>Returns the layer sheet side; either &quot;none&quot;, &quot;top&quot; or &quot;bottom&quot;. Only
+                    copper
+                    layers will be &quot;top&quot; or &quot;bottom&quot; all others will be &quot;none&quot;.</p>
+            </dd>
+            <dt><strong><a name="getside" class="item"><code>getSide</code></a></strong></dt>
+
+            <dd>
+                <p><em>getSide()</em></p>
+                <p>Returns the layer side; either &quot;top&quot;, &quot;inner&quot;, &quot;bottom&quot; or &quot;none&quot;.
+                    Rout, drill, and document layers will always be &quot;none&quot;</p>
+            </dd>
+            <dt><strong><a name="getname" class="item"><code>getName</code></a></strong></dt>
+
+            <dd>
+                <p><em>getName()</em></p>
+                <p>Returns the name of the layer.</p>
+            </dd>
+            <dt><strong><a name="getstepname" class="item"><code>getStepName</code></a></strong></dt>
+
+            <dd>
+                <p><em>getStepName()</em></p>
+                <p>Returns the step name associated with this layer.</p>
+            </dd>
+            <dt><strong><a name="getdisplaynumber" class="item"><code>getDisplayNumber</code></a></strong></dt>
+
+            <dd>
+                <p><em>getDisplayNumber()</em></p>
+                <p>Returns a pair <strong>($index, $number)</strong> where $index is the display number, and $number is
+                    the
+                    number of displayed layers.
+                    If the layer is not displayed $index will be -1.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <h3><a name="__setters__">--Setters--</a></h3>
+        <dl>
+            <dt><strong><a name="setcontext" class="item"><code>setContext</code></a></strong></dt>
+
+            <dd>
+                <p><em>setContext(&quot;context&quot;)</em></p>
+                <p>Takes one parameter; it can be either <strong>board</strong> or <strong>misc</strong>. Sets the layer
+                    context
+                    to the given parameter.
+                    It will return 1 if the action was successful, or 0 if it was unsuccessful.</p>
+            </dd>
+            <dt><strong><a name="settype" class="item"><code>setType</code></a></strong></dt>
+
+            <dd>
+                <p><em>setType(&quot;type&quot;)</em></p>
+                <p>Takes one parameter; it can be either <strong>signal</strong>, <strong>mixed</strong>,
+                    <strong>power_ground</strong>, <strong>solder_mask</strong>, <strong>silk_screen</strong>,
+                    <strong>solder_paste</strong>, <strong>drill</strong>, <strong>rout</strong> or
+                    <strong>document</strong>.
+                    Sets the layer type to the given parameter.
+                    It will return 1 if the action was successful, or 0 if it was unsuccessful.</p>
+            </dd>
+            <dt><strong><a name="setpolarity" class="item"><code>setPolarity</code></a></strong></dt>
+
+            <dd>
+                <p><em>setPolarity(polarity)</em></p>
+                <p>Takes one parameter; either <strong>positive</strong> or <strong>negative</strong>. Sets the layer
+                    polarity
+                    to the give parameter.
+                    Returns 1 if the action was successful, or 0 if it was unsuccessful.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <h3><a name="__behaviors__">--Behaviors--</a></h3>
+        <dl>
+            <dt><strong><a name="affect" class="item"><code>affect</code></a></strong></dt>
+
+            <dd>
+                <p><em>affect()</em></p>
+                <p>Affects the layer in the graphic editor.</p>
+            </dd>
+            <dt><strong><a name="unaffect" class="item"><code>unaffect</code></a></strong></dt>
+
+            <dd>
+                <p><em>unaffect()</em></p>
+                <p>Unaffects the layer in the graphic editor.</p>
+            </dd>
+            <dt><strong><a name="display" class="item"><code>display</code></a></strong></dt>
+
+            <dd>
+                <p><em>display(int)</em></p>
+                <p>Takes an optional parameter int; which can be an integer between 1 and 4 inclusive. It will display
+                    the layer
+                    in the graphic editor.
+                    If the parameter is not given it will default to the next display number, ie if there are already
+                    layers
+                    displayed it will be the next
+                    in the display order. The display order determines the display color.</p>
+            </dd>
+            <dt><strong><a name="displayoff" class="item"><code>displayOff</code></a></strong></dt>
+
+            <dd>
+                <p><em>displayOff()</em></p>
+                <p>Turns off the display in the graphic editor. If the layer is not displayed to begin with then no
+                    action will
+                    be taken.</p>
+            </dd>
+            <dt><strong><a name="debugon" class="item"><code>debugOn</code></a></strong></dt>
+
+            <dd>
+                <p><em>debugOn()</em></p>
+                <p>Turns on helpful print statements for debugging. The default is off.</p>
+            </dd>
+            <dt><strong><a name="debugoff" class="item"><code>debugOff</code></a></strong></dt>
+
+            <dd>
+                <p><em>debugOff()</em></p>
+                <p>This is the default behavior upon initialization. It will not print debug statements.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="dependencies">DEPENDENCIES</a></h1>
+        <p>carp</p>
+        <p>Data::Dumper</p>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="author">AUTHOR</a></h1>
+        <p>Matthew Bundy</p>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+
+</html>

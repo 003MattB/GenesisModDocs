@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DrillLayerSorter.pm</title>
+    <link rev="made" href="mailto:root@localhost"/>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div id="nav-placeholder"></div>
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+    <div class="content container">
+        <p class="mt-5"></p>
+        <h1><a name="name">DrillLayerSorter.pm</a></h1>
+        <p>Sorts drill layers</p>
+
+        <hr/>
+
+        <!-- INDEX BEGIN -->
+        <div name="index">
+            <p><a name="__index__"></a></p>
+
+            <ul>
+
+                <li><a href="#name">NAME</a></li>
+                <li><a href="#synopsis">SYNOPSIS</a></li>
+                <ul>
+
+                    <li><a href="#methods_inherited_from_abstractsorter___see_documentation_for_details">METHODS
+                        INHERITED FROM
+                        AbstractSorter - SEE DOCUMENTATION FOR DETAILS</a></li>
+                    <li><a href="#sort_methods">sort METHODS</a></li>
+                </ul>
+
+                <li><a href="#dependencies">DEPENDENCIES</a></li>
+                <li><a href="#author">AUTHOR</a></li>
+            </ul>
+
+            <hr name="index"/>
+        </div>
+        <!-- INDEX END -->
+
+        <h1><a name="synopsis">SYNOPSIS</a></h1>
+        <pre>
+     ##################                          ##################
+     ################## EXAMPLES OF SIMPLE USAGE ##################
+     ##################                          ##################
+     use DrillLayerSorter;
+     
+     my $job = Job-&gt;new(PTX =&gt; $ENV{JOB}, GENESIS =&gt; $f);
+     my $sorter = DrillLayerSorter-&gt;new(JOB_MOD =&gt; $job);
+     
+     my @drill_layers = (&quot;ldi&quot;,&quot;p11&quot;,&quot;p21&quot;,&quot;p31&quot;,&quot;p32&quot;,&quot;d2&quot;);
+     
+     #the default sort orders the layers by their suffix ie
+     # d1 comes before d1, p11 comes before p21 followed by p22
+     # layers without a numeric suffix will be put last in the sorting order
+     my @sorted = $sorter-&gt;sort(@drill_layers);
+     #result
+     #(&quot;d2&quot;,&quot;p11&quot;,&quot;p21&quot;,&quot;p31&quot;,&quot;p31&quot;,&quot;ldi&quot;);
+     
+     #orders the drill layers by their drill start
+     #so if p11 starts on layer 1a and p21 starts on layer 6a
+     #p11 will come before p21
+     my @sorted_by_start = $sorter-&gt;sortBy(&quot;ByDrillStart&quot;,@drill_layers);
+     #result
+     #(&quot;d2&quot;,&quot;p32&quot;,&quot;p31&quot;,&quot;ldi&quot;,&quot;p11&quot;,&quot;p21&quot;)
+     
+     #orders the drill layers by their drill end
+     #so if p11 ends on layer 5a and p21 starts on layer 10a
+     #p11 will come before p21
+     my @sorted_by_end = $sorter-&gt;sortBy(&quot;ByDrillEnd&quot;,@drill_layers);
+     #result
+     #(&quot;p11&quot;,&quot;p21&quot;,&quot;d2&quot;,&quot;p32&quot;,&quot;p31&quot;,&quot;ldi&quot;);</pre>
+        <p>
+        </p>
+        <h2><a name="methods_inherited_from_abstractsorter___see_documentation_for_details">METHODS INHERITED FROM
+            AbstractSorter - SEE DOCUMENTATION FOR DETAILS</a></h2>
+        <dl>
+            <dt><strong><a name="new" class="item"><code>new</code></a></strong></dt>
+
+            <dt><strong><a name="sort" class="item"><code>sort</code></a></strong></dt>
+
+            <dt><strong><a name="sortby" class="item"><code>sortBy</code></a></strong></dt>
+
+            <dt><strong><a name="debugon" class="item"><code>debugOn</code></a></strong></dt>
+
+            <dt><strong><a name="debugoff" class="item"><code>debugOff</code></a></strong></dt>
+
+        </dl>
+        <p>
+        </p>
+        <h2><a name="sort_methods">sort METHODS</a></h2>
+        <dl>
+            <dt><strong><code>sort</code></strong></dt>
+
+            <dd>
+                <p><em>sortBy(@drill_layers) </em></p>
+                <p>Returns a sorted list of drill layers ordered by their suffix.</p>
+                <p>See SYNOPSIS for detailed usage.</p>
+            </dd>
+            <dt><strong><a name="sortby2" class="item"><a href="#sortby"><code>sortBy</code></a></a></strong></dt>
+
+            <dd>
+                <p><em>sortBy(&quot;ByDrillStart&quot;, @drill_layers) </em></p>
+                <p>The first parameter is as shown, the second parameter is a list of drill layers. Returns a list
+                    sorted by
+                    drill start.</p>
+                <p>See SYNOPSIS for detailed usage.</p>
+            </dd>
+            <dt><strong><a name="sortby3" class="item"><a href="#sortby"><code>sortBy</code></a></a></strong></dt>
+
+            <dd>
+                <p><em>sortBy(&quot;ByDrillEnd&quot;, @drill_layers) </em></p>
+                <p>The first parameter is as shown, the second parameter is a list of drill layers. Returns a list
+                    sorted by
+                    drill end.</p>
+                <p>See SYNOPSIS for detailed usage.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="dependencies">DEPENDENCIES</a></h1>
+        <p>Carp</p>
+        <p>AbstractLayerSorter</p>
+        <p>Data::Dumper</p>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="author">AUTHOR</a></h1>
+        <p>Matthew Bundy</p>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Activity.pm</title>
+    <link rev="made" href="mailto:root@localhost"/>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div id="nav-placeholder"></div>
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+    <div class="content container">
+        <p class="mt-5"></p>
+        <h1><a name="name">Activity.pm</a></h1>
+        <p>An object that has a start and end time. Times are just integers.</p>
+        <hr/>
+        <!-- INDEX BEGIN -->
+        <div name="index">
+            <p><a name="__index__"></a></p>
+
+            <ul>
+
+                <li><a href="#name">NAME</a></li>
+                <li><a href="#synopsis">SYNOPSIS</a></li>
+                <ul>
+
+                    <li><a href="#methods">METHODS</a></li>
+                </ul>
+
+                <li><a href="#dependencies">DEPENDENCIES</a></li>
+                <li><a href="#author">AUTHOR</a></li>
+            </ul>
+
+            <hr name="index"/>
+        </div>
+        <!-- INDEX END -->
+
+        <h1><a name="synopsis">SYNOPSIS</a></h1>
+        <pre>
+     ##################                          ##################
+     ################## EXAMPLES OF SIMPLE USAGE ##################
+     ##################                          ##################
+     use Activity;
+     my $activity = Activity-&gt;new(activity =&gt; A, startTime =&gt; 5, endTime =&gt; 12);</pre>
+        <p>
+        </p>
+        <h2><a name="methods">METHODS</a></h2>
+        <dl>
+            <dt><strong><a name="new" class="item"><code>new</code></a></strong></dt>
+
+            <dd>
+                <p><em>new(activity =&gt; A, startTime =&gt; S, endTime =&gt; E)</em></p>
+                <p>Creates a new activity of type A with a start time of S and end time of E.</p>
+                <p><strong>S</strong> and <strong>E</strong> are just <strong>integers</strong>.</p>
+            </dd>
+            <dt><strong><a name="getactivity" class="item"><code>getActivity</code></a></strong></dt>
+
+            <dd>
+                <p><em>getActivity()</em></p>
+                <p>Returns the activity which was initialized.</p>
+            </dd>
+            <dt><strong><a name="getstarttime" class="item"><code>getStartTime</code></a></strong></dt>
+
+            <dd>
+                <p><em>getStartTime()</em></p>
+                <p>Returns the start time of the activity.</p>
+            </dd>
+            <dt><strong><a name="getendtime" class="item"><code>getEndTime</code></a></strong></dt>
+
+            <dd>
+                <p><em>getEndTime()</em></p>
+                <p>Returns the end time of the activity.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="dependencies">DEPENDENCIES</a></h1>
+        <p>Carp</p>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="author">AUTHOR</a></h1>
+        <p>Matthew Bundy</p>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+
+</html>

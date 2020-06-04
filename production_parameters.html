@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ProductionParameters.pm</title>
+    <link rev="made" href="mailto:root@localhost"/>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div id="nav-placeholder"></div>
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+    <div class="content container">
+        <p class="mt-5"></p>
+        <h1><a name="name">ProductionParameters.pm</a></h1>
+        <p> Used to help with scripts associated with Genesis on actions related to a Image Production Parameters Setup.
+            This is designed to use Protech inc.'s default values, and many of the methods do this in the background. It
+            should be kept in mind that the method names might be deceiving. The set methods don't actually set anything
+            in genesis, they only set the instance variables in the ProductionParameters object. To pass the values to
+            genesis use the <strong>execute()</strong> function. Additionally, after the execute function is called, by
+            default it will reset the default values (for example x and y stretch will be set back to 100.0). If this is
+            not desired call the <strong>resetAfter(0)</strong> function with the 0 passed in.</p>
+
+        <hr/>
+
+        <!-- INDEX BEGIN -->
+        <div name="index">
+            <p><a name="__index__"></a></p>
+
+            <ul>
+
+                <li><a href="#name">NAME</a></li>
+                <li><a href="#synopsis">SYNOPSIS</a></li>
+                <ul>
+
+                    <li><a href="#methods">METHODS</a></li>
+                </ul>
+
+                <li><a href="#dependencies">DEPENDENCIES</a></li>
+                <li><a href="#author">AUTHOR</a></li>
+            </ul>
+
+            <hr name="index"/>
+        </div>
+        <!-- INDEX END -->
+
+        <h1><a name="synopsis">SYNOPSIS</a></h1>
+        <pre>
+     use ProductionParameters;
+     use Genesis;
+     use Job;
+     my $f = new Genesis;
+     my $job = Job-&gt;new(PTX =&gt; $ENV{JOB}, GENESIS =&gt; $f);
+     #creating a new object
+     #$prod = ProductionParameters-&gt;new(JOB_MOD =&gt; $job)
+     
+     #be sure that there is a 'panel' step or set it by $prod-&gt;setStep('step_name');
+     #now set the layer whos parameters are to be set
+     $prod-&gt;setLayer('layer_name');
+     
+     #by default the stretch is 100.0000 for both x and y
+     $prod-&gt;setStretch(100.02, 100.04);
+     
+     #all Protech's default panel parameters are automatically set up in the background
+     #all that is left to do is execute
+     $prod-&gt;execute();
+     #the values, such as, x and y stretch are set back to default after execution
+
+     #set DEBUG to 1 to add some print statements to methods
+     $prod-&gt;{DEBUG} = 1;
+        </pre>
+        <p>
+        </p>
+        <h2><a name="methods">METHODS</a></h2>
+        <dl>
+            <dt><strong><a name="new" class="item"><code>new</code></a></strong></dt>
+
+            <dd>
+                <p><em>new(JOB_MOD =&gt; $obj)</em></p>
+                <p>Requires a <strong>Job</strong> object as a parameter.
+                    Returns a new ProductionParameters object.</p>
+            </dd>
+            <dt><strong><a name="setlayer" class="item"><code>setLayer</code></a></strong></dt>
+
+            <dd>
+                <p><em>setLayer('layer_name')</em></p>
+                <p>Takes one parameter, <strong>layer_name</strong>. Sets the instance variables to the standard default
+                    production parameters for <em>protech</em>.
+                    <strong>Note</strong>, this does not set the production parameters in genesis, it stages the
+                    variables for
+                    later execution.</p>
+            </dd>
+            <dt><strong><a name="setstretch" class="item"><code>setStretch</code></a></strong></dt>
+
+            <dd>
+                <p><em>setStretch(x_stretch, y_stretch)</em></p>
+                <p>Takes two parameters, <strong>x_stretch</strong> and <strong>y_stretch</strong> in that order. Sets
+                    the x and
+                    y stretch instance variables.</p>
+            </dd>
+            <dt><strong><a name="execute" class="item"><code>execute</code></a></strong></dt>
+
+            <dd>
+                <p><em>execute()</em></p>
+                <p>Takes no parameters. This is called after all the parameters are set up. It will send the values of
+                    instance
+                    variables to genesis.
+                    By default, after called, the instance variables will be reset to their default values. If this is
+                    not
+                    desired call <strong>resetAfter(0)</strong>
+                    before execution.</p>
+            </dd>
+            <dt><strong><a name="resetafter" class="item"><code>resetAfter</code></a></strong></dt>
+
+            <dd>
+                <p><em>resetAfter(1|0)</em></p>
+                <p>Takes one boolean parameter, either <strong>1</strong> or <strong>0</strong>. If 1, then after the
+                    <strong>execute()</strong>
+                    function is called, all default values will be
+                    reset. If 0, then the values of instance variables will be unchanged after
+                    <strong>execute()</strong> is
+                    called.</p>
+            </dd>
+            <dt><strong><a name="printvariables" class="item"><code>printVariables</code></a></strong></dt>
+
+            <dd>
+                <p><em>printVariables()</em></p>
+                <p>Takes no parameters. Prints the instance variables. Useful for debugging</p>
+            </dd>
+            <dt><strong><a name="setstep" class="item"><code>setStep</code></a></strong></dt>
+
+            <dd>
+                <p><em>setStep('step_name')</em></p>
+                <p>Takes one parameter, <strong>step_name</strong>. By default, when a ProductionParameters object is
+                    created
+                    the step is 'panel'. If there is no panel
+                    step in the job then this needs to be used to manually set the step. Alternatively if the panel step
+                    is not
+                    the intended step to
+                    set production parameters then use this function.</p>
+            </dd>
+            <dt><strong><a name="setdefaultvalues" class="item"><code>setDefaultValues</code></a></strong></dt>
+
+            <dd>
+                <p><em>setDefaultValues()</em></p>
+                <p>Takes no parameters. In general this is not necessary to use. It is mainly used in the
+                    background.</p>
+            </dd>
+            <dt><strong><a name="setpolarity" class="item"><code>setPolarity</code></a></strong></dt>
+
+            <dd>
+                <p><em>setPolarity()</em></p>
+                <p>Takes no parameters. In general this is not necessary to use. It is mainly used in the
+                    background.</p>
+            </dd>
+            <dt><strong><a name="setmirror" class="item"><code>setMirror</code></a></strong></dt>
+
+            <dd>
+                <p><em>setMirror()</em></p>
+                <p>Takes no parameters. In general this is not necessary to use. It is mainly used in the
+                    background.</p>
+            </dd>
+            <dt><strong><a name="setstepcenters" class="item"><code>setStepCenters</code></a></strong></dt>
+
+            <dd>
+                <p><em>setStepCenters()</em></p>
+                <p>Takes no parameters. In general this is not necessary to use. It is mainly used in the
+                    background.</p>
+            </dd>
+            <dt><strong><a name="setswapaxes" class="item"><code>setSwapAxes</code></a></strong></dt>
+
+            <dd>
+                <p><em>setSwapAxes</em></p>
+                <p>Takes no parameters. In general this is not necessary to use. It is mainly used in the
+                    background.</p>
+            </dd>
+            <dt><strong><a name="setshift" class="item"><code>setShift</code></a></strong></dt>
+
+            <dd>
+                <p><em>setShift()</em></p>
+                <p>Takes no parameters. In general this is not necessary to use. It is mainly used in the
+                    background.</p>
+            </dd>
+            <dt><strong><a name="setresolution" class="item"><code>setResolution</code></a></strong></dt>
+
+            <dd>
+                <p><em>setResolution()</em></p>
+                <p>Takes no parameters. In general this is not necessary to use. It is mainly used in the background.
+                    It just sets the resolution to 0.125.</p>
+            </dd>
+            <dt><strong><a name="isstandardpanelsize" class="item"><code>isStandardPanelSize</code></a></strong></dt>
+
+            <dd>
+                <p><em>isStandardPanelSize()</em></p>
+                <p><strong>THIS FUNCTION IS INCOMPLETE - IT CURRENTLY HAS NO FUNCTIONALITY</strong>
+                    Takes no parameters. Returns boolean. <strong>1</strong> if true, <strong>0</strong> if false.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="dependencies">DEPENDENCIES</a></h1>
+        <p>Carp</p>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="author">AUTHOR</a></h1>
+        <p>Matthew Bundy</p>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+
+</html>

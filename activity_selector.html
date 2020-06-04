@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ActivitySelector.pm</title>
+    <link rev="made" href="mailto:root@localhost"/>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div id="nav-placeholder"></div>
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+    <div class="content container">
+
+        <p class="mt-5"></p>
+        <h1><a name="name">ActivitySelector.pm</a></h1>
+        <p> Greedy activity selector creates a subset S' which contains the maximum number of
+            non-conflicting activities of
+            the set S. The solution S' has the property where |S'| &lt;= |S|.</p>
+
+        <hr/>
+
+        <!-- INDEX BEGIN -->
+        <div name="index">
+            <p><a name="__index__"></a></p>
+
+            <ul>
+
+                <li><a href="#name">NAME</a></li>
+                <li><a href="#synopsis">SYNOPSIS</a></li>
+                <ul>
+
+                    <li><a href="#methods">METHODS</a></li>
+                </ul>
+
+                <li><a href="#dependencies">DEPENDENCIES</a></li>
+                <li><a href="#author">AUTHOR</a></li>
+            </ul>
+
+            <hr name="index"/>
+        </div>
+        <!-- INDEX END -->
+
+        <h1><a name="synopsis">SYNOPSIS</a></h1>
+        <pre>
+     ##################                          ##################
+     ################## EXAMPLES OF SIMPLE USAGE ##################
+     ##################                          ##################
+     use ActivitySelector;
+     use Activity;
+     use Sorter;
+     
+     my @activities;
+     for (my $i = 0; $i &lt; n; $i++){
+          push (@activities, Activity-&gt;new(activity =&gt; A, startTime = S, endTime =&gt; E));
+     }
+     my $selector = ActivitySelector-&gt;new(sorter =&gt; $sorter, activities =&gt; \@activities);
+     my @selected = $selector-&gt;select();</pre>
+        <p>
+        </p>
+        <h2><a name="methods">METHODS</a></h2>
+        <dl>
+            <dt><strong><a name="new" class="item"><code>new</code></a></strong></dt>
+
+            <dd>
+                <p><em>new(sorter =&gt; $sorter, activities =&gt; \@activities)</em></p>
+                <p>Constructs a new ActivitySelector.</p>
+                <p><strong>selector</strong> is a sorter object which conforms to AbstractSorter.</p>
+                <p><strong>activities</strong> is a list of activities which are of type Activity</p>
+            </dd>
+            <dt><strong><a name="select" class="item"><code>select</code></a></strong></dt>
+
+            <dd>
+                <p><em>select()</em></p>
+                <p>Returns an optimal subset of activities.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="dependencies">DEPENDENCIES</a></h1>
+        <p>Carp</p>
+        <p>Activity</p>
+        <p>Sorter</p>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="author">AUTHOR</a></h1>
+        <p>Matthew Bundy</p>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+
+</html>

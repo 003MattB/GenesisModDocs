@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AbstractLayerSorter.pm</title>
+    <link rev="made" href="mailto:root@localhost"/>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+
+<body>
+<div class="wrapper">
+    <div id="nav-placeholder"></div>
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+
+    <div class="content container">
+        <p class="mt-5"></p>
+        <h1><a name="name">AbstractLayerSorter.pm</a></h1>
+        <p class="mod-description">An abstract class used for sorting arrays</p>
+        <hr/>
+        <!-- INDEX BEGIN -->
+        <div name="index">
+            <p><a name="__index__"></a></p>
+
+            <ul>
+
+                <li><a href="#name">NAME</a></li>
+                <li><a href="#synopsis">SYNOPSIS</a></li>
+                <ul>
+
+                    <li><a href="#methods">METHODS</a></li>
+                    <li><a href="#methods_inherited_from_abstractsorter___see_documentation_for_details">METHODS
+                        INHERITED FROM
+                        AbstractSorter - SEE DOCUMENTATION FOR DETAILS</a></li>
+                    <li><a href="#methods_that_need_to_be_implemented">METHODS THAT NEED TO BE IMPLEMENTED</a></li>
+                    <li><a href="#variables_that_need_to_be_defined">VARIABLES THAT NEED TO BE DEFINED</a></li>
+                </ul>
+
+                <li><a href="#dependencies">DEPENDENCIES</a></li>
+                <li><a href="#author">AUTHOR</a></li>
+            </ul>
+
+            <hr name="index"/>
+        </div>
+        <!-- INDEX END -->
+
+        <h1><a name="synopsis">SYNOPSIS</a></h1>
+        <pre>
+     ##################                          ##################
+     ################## EXAMPLES OF SIMPLE USAGE ##################
+     ##################                          ##################
+     
+     use SubLayerSorter;
+     my $job = Job-&gt;new(PTX =&gt; $ENV{JOB}, GENESIS =&gt; $f);
+     my $sorter = SubLayerSorter-&gt;new(JOB_MOD =&gt; $job);
+     
+     my @sorted = $sorter-&gt;sort(@layers);
+     my @sorted_different = $sorter-&gt;sortBy(&quot;ByNumeric&quot;,@layers);</pre>
+        <p>
+        </p>
+        <h2><a name="methods">METHODS</a></h2>
+        <dl>
+            <dt><strong><a name="new" class="item"><code>new</code></a></strong></dt>
+
+            <dd>
+                <p><em>new(JOB_MOD =&gt; $job)</em></p>
+                <p>Creates a new LayerSorter object.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <h2><a name="methods_inherited_from_abstractsorter___see_documentation_for_details">METHODS INHERITED FROM
+            AbstractSorter - SEE DOCUMENTATION FOR DETAILS</a></h2>
+        <dl>
+            <dt><strong><code>new</code></strong></dt>
+
+            <dt><strong><a name="sort" class="item"><code>sort</code></a></strong></dt>
+
+            <dt><strong><a name="sortby" class="item"><code>sortBy</code></a></strong></dt>
+
+            <dt><strong><a name="debugon" class="item"><code>debugOn</code></a></strong></dt>
+
+            <dt><strong><a name="debugoff" class="item"><code>debugOff</code></a></strong></dt>
+
+        </dl>
+        <p>
+        </p>
+        <h2><a name="methods_that_need_to_be_implemented">METHODS THAT NEED TO BE IMPLEMENTED</a></h2>
+        <dl>
+            <dt><strong><a name="_init" class="item"><code>_init</code></a></strong></dt>
+
+            <dd>
+                <p>Needs to pass on the parameters to $self</p>
+                <p>Does not return anything.</p>
+            </dd>
+            <dt><strong><a name="_compare" class="item"><code>_compare</code></a></strong></dt>
+
+            <dd>
+                <p>Takes two parameters.</p>
+                <p>If parameter 1 is greater than parameter 2 it returns a positive number.</p>
+                <p>If the two parameters are equal it returns 0.</p>
+                <p>Otherwise it returns a negative number.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <h2><a name="variables_that_need_to_be_defined">VARIABLES THAT NEED TO BE DEFINED</a></h2>
+        <dl>
+            <dt><strong><a name="_type" class="item"><code>_type</code></a></strong></dt>
+
+            <dd>
+                <p>Defines what type of layer the sorter is capable of handling.</p>
+                <p>Can be: signal | mixed | power_ground | solder_mask | silk_screen | solder_paste | drill | rout |
+                    document.</p>
+                <p>If they type doesn't matter then set it as &quot;any&quot;</p>
+            </dd>
+            <dt><strong><a name="job_mod" class="item"><code>JOB_MOD</code></a></strong></dt>
+
+            <dd>
+                <p>Requires the Job module to be set in the _init function.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="dependencies">DEPENDENCIES</a></h1>
+        <p>Carp</p>
+        <p>Scalar::Util</p>
+        <p>AbstractSorter</p>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="author">AUTHOR</a></h1>
+        <p>Matthew Bundy</p>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+
+</html>

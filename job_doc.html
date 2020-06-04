@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Job.pm</title>
+    <link rev="made" href="mailto:root@localhost"/>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div id="nav-placeholder"></div>
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+    <div class="content container">
+        <p class="mt-5"></p>
+        <h1><a name="name">Job.pm</a></h1>
+        <p> Used to help with scripts associated with Genesis on actions related to a job.</p>
+
+        <hr/>
+
+        <!-- INDEX BEGIN -->
+        <div name="index">
+            <p><a name="__index__"></a></p>
+
+            <ul>
+
+                <li><a href="#name">NAME</a></li>
+                <li><a href="#synopsis">SYNOPSIS</a></li>
+                <ul>
+
+                    <li><a href="#methods">METHODS</a></li>
+                </ul>
+
+                <li><a href="#dependencies">DEPENDENCIES</a></li>
+                <li><a href="#author">AUTHOR</a></li>
+            </ul>
+
+            <hr name="index"/>
+        </div>
+        <!-- INDEX END -->
+
+
+        <h1><a name="synopsis">SYNOPSIS</a></h1>
+        <pre>
+     use Job;
+     #creating a new Job object
+     #$j = Job-&gt;new(PTX =&gt; thisjob, GENESIS =&gt; pointerToGenesisObject)
+     $j = Job-&gt;new(PTX =&gt; $ENV{JOB}, GENESIS =&gt; $f);
+     
+     #get the top copper layer associated with $drill
+     #use this instead of $j-&gt;{LAYER$drill}{START_NAME}
+     my $topCopper = $j-&gt;getDrillStart($drill);
+     
+     
+     #get a list of features on a given layer
+     my @features = $j-&gt;getLayerFeatures($stepName, $layerName);
+     #or
+     $j-&gt;getLayerFeatures($stepName, $layerName);
+     my @features = $j-&gt;{FEATURES}{STEP$stepName}{LAYER$layerName}{ALL}
+     
+     #find out if a layer has a date code
+     my ($hasDateCode, $dateCode) = $j-&gt;hasDateCode($stepName,$layerName);
+     
+     #get a list of copper layers which are also board layers
+     my @boardCopperLayers = $j-&gt;getLayers(TYPE =&gt; 'signal|mixed|power_ground', CONTEXT =&gt; 'board')
+     
+     #get the drill layers that start at layer 2
+     my @drills = $j-&gt;(START_NAME =&gt; '2a', TYPE =&gt; 'drill');
+     
+     #set DEBUG to 1 to add some print statements to methods
+     $j-&gt;{DEBUG} = 1; or $j-&gt;debugOn();  $j-&gt;debugOff();</pre>
+        <p>
+        </p>
+        <h2><a name="methods">METHODS</a></h2>
+        <dl>
+            <dt><strong><a name="new" class="item"><code>new</code></a></strong></dt>
+
+            <dd>
+                <p><em>new(PTX =&gt; ptx_number, GENESIS =&gt; 'genesis_object') </em></p>
+                <p>Takes two parameters <strong>PTX</strong> and <strong>GENESIS</strong>.
+                    Returns a new Job object.</p>
+            </dd>
+            <dt><strong><a name="initializematrix" class="item"><code>initializeMatrix</code></a></strong></dt>
+
+            <dd>
+                <p><em>initializeMatrix()</em></p>
+                <p>Takes no parameters.
+                    Creates instance variables for the matrix.
+                    Returns nothing.
+                    <em>This is used by the constructor and should not be used on it's own.</em></p>
+            </dd>
+            <dt><strong><a name="getdrillstart" class="item"><code>getDrillStart</code></a></strong></dt>
+
+            <dd>
+                <p><em>getDrillStart('drill_layer')</em></p>
+                <p>Takes a <strong>drill layer</strong> as a parameter.
+                    Returns the first copper layer the drill layer hits if <strong>START_NAME</strong> is not a copper
+                    layer.
+                </p>
+            </dd>
+            <dt><strong><a name="gettopboardcopper" class="item"><code>getTopBoardCopper</code></a></strong></dt>
+
+            <dd>
+                <p><em>getTopBoardCopper()</em></p>
+                <p>Takes no parameters.
+                    Returns the top copper layer in the matrix that is a board layer.
+                    <em>It's mostly used by getDrillStart.</em></p>
+            </dd>
+            <dt><strong><a name="getdrillend" class="item"><code>getDrillEnd</code></a></strong></dt>
+
+            <dd>
+                <p><em>getDrillEnd('drill_layer')</em></p>
+                <p>Takes a <strong>drill layer</strong> as a parameter.
+                    Returns the last copper layer the drill layer hits if <strong>END_NAME</strong> is not a copper
+                    layer.</p>
+            </dd>
+            <dt><strong><a name="getbotboardcopper" class="item"><code>getBotBoardCopper</code></a></strong></dt>
+
+            <dd>
+                <p><em>getBotBoardCopper()</em></p>
+                <p>Takes no parameters.
+                    Returns the bottom copper layer in the matrix that is a board layer.
+                    <em>It's mostly used by getDrillEnd.</em></p>
+            </dd>
+            <dt><strong><a name="getlayerfeatures" class="item"><code>getLayerFeatures</code></a></strong></dt>
+
+            <dd>
+                <p><em>getLayerFeatures('step_name, 'layer_name')</em></p>
+                <p>Takes a <strong>step name</strong> and a <strong>layer name</strong> as parameters.
+                    Returns a list of features and creates an instance variable <strong>$obj
+                        -&gt;</strong>{FEATURES}{STEPNAME}{LAYERNAME}{ALL}.
+                </p>
+            </dd>
+            <dt><strong><a name="getlayerfeatureslines" class="item"><code>getLayerFeaturesLines</code></a></strong>
+            </dt>
+
+            <dd>
+                <p><em>getLayerFeaturesLines('step_name, 'layer_name')</em></p>
+                <p>Takes a <strong>step name</strong> and a <strong>layer name</strong> as parameters.
+                    Returns a list of line features and creates an instance variable <strong>$obj
+                        -&gt;</strong>{FEATURES}{STEPNAME}{LAYERNAME}{LINES}.
+                </p>
+            </dd>
+            <dt><strong><a name="getlayerfeaturespads" class="item"><code>getLayerFeaturesPads</code></a></strong></dt>
+
+            <dd>
+                <p><em>getLayerFeaturesPads('step_name, 'layer_name')</em></p>
+                <p>Takes a <strong>step name</strong> and a <strong>layer name</strong> as parameters.
+                    Returns a list of pad features and creates an instance variable <strong>$obj
+                        -&gt;</strong>{FEATURES}{STEPNAME}{LAYERNAME}{PADS}.
+                </p>
+            </dd>
+            <dt><strong><a name="getlayerfeaturesarcs" class="item"><code>getLayerFeaturesArcs</code></a></strong></dt>
+
+            <dd>
+                <p><em>getLayerFeaturesArcs('step_name, 'layer_name')</em></p>
+                <p>Takes a <strong>step name</strong> and a <strong>layer name</strong> as parameters.
+                    Returns a list of arc features and creates an instance variable <strong>$obj
+                        -&gt;</strong>{FEATURES}{STEPNAME}{LAYERNAME}{ARCS}.
+                </p>
+            </dd>
+            <dt><strong><a name="getlayerfeaturestext" class="item"><code>getLayerFeaturesText</code></a></strong></dt>
+
+            <dd>
+                <p><em>getLayerFeaturesText('step_name, 'layer_name')</em></p>
+                <p>Takes a <strong>step name</strong> and a <strong>layer name</strong> as parameters.
+                    Returns a list of text features and creates an instance variable <strong>$obj
+                        -&gt;</strong>{FEATURES}{STEPNAME}{LAYERNAME}{TEXT}.
+                </p>
+            </dd>
+            <dt><strong><a name="hasdatecode" class="item"><code>hasDateCode</code></a></strong></dt>
+
+            <dd>
+                <p><em>hasDateCode('step_name, 'layer_name')</em></p>
+                <p>Takes a <strong>step name</strong> and a <strong>layer name</strong> as parameters.
+                    Returns a list <strong>(1, date code format)</strong> if true.
+                    Else a list <strong>(0, 0)</strong> if false</p>
+            </dd>
+            <dt><strong><a name="hasserialnumbers" class="item"><code>hasSerialNumbers</code></a></strong></dt>
+
+            <dd>
+                <p><em>hasSerialNumbers('step_name, 'layer_name')</em></p>
+                <p>Takes a <strong>step name</strong> and a <strong>layer name</strong> as parameters.
+                    Returns <strong>1</strong> if true, else <strong>0</strong>.</p>
+            </dd>
+            <dt><strong><a name="hasdashnumbers" class="item"><code>hasDashNumbers</code></a></strong></dt>
+
+            <dd>
+                <p><em>hasDashNumbers('step_name, 'layer_name')</em></p>
+                <p>Takes a <strong>step name</strong> and a <strong>layer name</strong> as parameters.
+                    Returns <strong>1</strong> if true, else <strong>0</strong></p>
+            </dd>
+            <dt><strong><a name="hasscore" class="item"><code>hasScore</code></a></strong></dt>
+
+            <dd>
+                <p><em>hasScore('step_name, 'layer_name')</em></p>
+                <p>Takes a <strong>step name</strong> and a <strong>layer name</strong> as parameters or defaults to
+                    <strong>pcb</strong> and <strong>otl</strong> if they exist and no parameters are given.
+                    It looks for r10.2 or r30.1 lines.
+                    Returns <strong>1</strong> if true, else <strong>0</strong> if false</p>
+            </dd>
+            <dt><strong><a name="hasstep" class="item"><code>hasStep</code></a></strong></dt>
+
+            <dd>
+                <p><em>hasStep('step_name')</em></p>
+                <p>Takes <strong>step_name</strong> as a parameter.
+                    Returns <strong>1</strong> if true, else <strong>0</strong>.</p>
+            </dd>
+            <dt><strong><a name="haslayer" class="item"><code>hasLayer</code></a></strong></dt>
+
+            <dd>
+                <p><em>hasLayer('layer_name')</em></p>
+                <p>Takes <strong>layer name</strong> as a parameter.
+                    Returns boolean.</p>
+            </dd>
+            <dt><strong><a name="getdrilllayertype" class="item"><code>getDrillLayerType</code></a></strong></dt>
+
+            <dd>
+                <p><em>getDrillLayerType('drill_layer')</em></p>
+                <p>Takes a <strong>drill layer</strong> as a parameter.
+                    Returns <strong>via</strong>, <strong>holefill</strong>, <strong>non_plated</strong>,
+                    <strong>ldi</strong>
+                    or <strong>primary</strong>.
+                    Via would be a drill layer that does not pierce all layers.
+                    Holefill would be a drill layer that pierces all layers, but the suffix is not the largest of all
+                    drill
+                    layers (ie p&quot;11&quot; &lt; p&quot;12&quot;).
+                    d2 is a non_plated &amp; ldi is ldi.
+                    Primary also pierces all layers, but has the largest suffix ie (p&quot;12&quot; &gt; p&quot;11&quot;).
+                </p>
+            </dd>
+            <dt><strong><a name="islargestphasedrill" class="item"><code>isLargestPhaseDrill</code></a></strong></dt>
+
+            <dd>
+                <p><em>isLargestPhaseDrill('drill_layer')</em></p>
+                <p>Takes a <strong>drill layer</strong> as a parameter.
+                    Returns boolean <strong>1</strong> or <strong>0</strong>.
+                    If drill layer does not follow proper naming convention (eg p&quot;some number&quot;) it is not a
+                    valid
+                    phase drill.
+                    Returns true if the layer suffix is the greatest of all drill layers (ie p&quot;32&quot; &gt; p&quot;31&quot;
+                    &gt; p&quot;21&quot; &gt; p&quot;11&quot;).</p>
+            </dd>
+            <dt><strong><a name="setdrilltools" class="item"><code>setDrillTools</code></a></strong></dt>
+
+            <dd>
+                <p><em>setDrillTools('step_name')</em></p>
+                <p>Takes a <strong>step</strong> as a parameter.<br>
+                    Organizes drill tools in the object in the following structure:<br>
+                    $obj-&gt;{$step.&quot;DRILL&quot;.$layer}{DRILL_SIZES} = [tool sizes]<br>
+                    $obj-&gt;{$step.&quot;DRILL&quot;.$layer}{FINISH_SIZES} = [finish sizes]<br>
+                    $obj-&gt;{$step.&quot;DRILL&quot;.$layer}{&quot;TOOL&quot;.$i}{COUNT} = number of of this tool
+                    number <br>
+                    $obj-&gt;{$step.&quot;DRILL&quot;.$layer}{&quot;TOOL&quot;.$i}{DRILL_SIZE} = drill size of this tool
+                    number<br>
+                    $obj-&gt;{$step.&quot;DRILL&quot;.$layer}{&quot;TOOL&quot;.$i}{FINISH_SIZE} = finish size of this
+                    tool
+                    number<br>
+                    $obj-&gt;{$step.&quot;DRILL&quot;.$layer}{&quot;TOOL&quot;.$i}{MAX_TOL} = upper tolerance of this
+                    tool
+                    number<br>
+                    $obj-&gt;{$step.&quot;DRILL&quot;.$layer}{&quot;TOOL&quot;.$i}{MIN_TOL} = lower tolerance of this
+                    tool
+                    number<br>
+                    $obj-&gt;{$step.&quot;DRILL&quot;.$layer}{&quot;TOOL&quot;.$i}{TOOL_NUM} = tool number of this tool
+                    number<br>
+                    $obj-&gt;{$step.&quot;DRILL&quot;.$layer}{&quot;TOOL&quot;.$i}{SHAPE} = shape of this tool number
+                    (hole |
+                    slot)<br>
+                    $obj-&gt;{$step.&quot;DRILL&quot;.$layer}{&quot;TOOL&quot;.$i}{TYPE} = hole finish of this tool
+                    number
+                    (plated | non_plated | via )</p>
+            </dd>
+            <dt><strong><a name="getlayerside" class="item"><code>getLayerSide</code></a></strong></dt>
+
+            <dd>
+                <p><em>getLayerSide('layer_name')</em></p>
+                <p>Takes a <strong>layer</strong> as a parameter.
+                    Returns <strong>top</strong>, <strong>bottom</strong>, <strong>inner</strong>, or
+                    <strong>none</strong></p>
+            </dd>
+            <dt><strong><a name="getlayers" class="item"><code>getLayers</code></a></strong></dt>
+
+            <dd>
+                <p><em>getLayers(END_NAME =&gt; '(layer-name)', <br>
+                    POLARITY =&gt; '(positive|negative)', <br>
+                    START_NAME =&gt; '(layer-name)', <br>
+                    TYPE =&gt; '(solder_paste|silk_screen|solder_mask|signal|mixed|power_ground|drill|rout|document),
+                    <br>
+                    ROW =&gt; '(#)', <br>
+                    CONTEXT =&gt; '(board|misc)', <br>
+                    FOIL_SIDE =&gt; '(none|top|bottom)', <br>
+                    SHEET_SIDE =&gt; '(none|top|bottom)', <br>
+                    SIDE =&gt; '(top|bottom|inner)') </em></p>
+                <p>Takes the parameters that define layers.
+                    Returns a list of layers that match that specification. Note: any or all of the parameters may be
+                    omitted.
+                    If all parameters are omitted then all layers will be returned. See Synopsis for example usage.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="dependencies">DEPENDENCIES</a></h1>
+        <p>Genhelper<br>
+            Carp</p>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="author">AUTHOR</a></h1>
+        <p>Matthew Bundy</p>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+
+</html>

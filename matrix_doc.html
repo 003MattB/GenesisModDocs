@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Matrix.pm</title>
+    <link rev="made" href="mailto:root@localhost"/>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div id="nav-placeholder"></div>
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+    <div class="content container">
+        <p class="mt-5"></p>
+        <h1><a name="name">Matrix.pm</a></h1>
+        <p>Creates an interface to do matrix operations in Genesis.
+            Use this to keep the matrix info up to date throughout the
+            life of the object. This will make getting info about the matrix and its related objects
+            (steps and layers) quicker. The Matrix is composed of Layers and Steps, and each can be
+            manipulated with their respective functions.
+        </p>
+        <p>
+        </p>
+        <hr/>
+
+        <!-- INDEX BEGIN -->
+        <div name="index">
+            <p><a name="__index__"></a></p>
+
+            <ul>
+
+                <li><a href="#name">NAME</a></li>
+                <li><a href="#synopsis">SYNOPSIS</a></li>
+                <li><a href="#methods">METHODS</a></li>
+                <ul>
+
+                    <ul>
+
+                        <li><a href="#__modifiers__">-Modifiers-</a></li>
+                        <li><a href="#__matrix_info__">-Matrix info-</a></li>
+                        <li><a href="#__getters__matrix_objects___">-Getters (matrix objects)-</a></li>
+                        <li><a href="#__debugging__">-Debugging-</a></li>
+                    </ul>
+
+                </ul>
+
+                <li><a href="#dependencies">DEPENDENCIES</a></li>
+                <li><a href="#author">AUTHOR</a></li>
+            </ul>
+
+            <hr name="index"/>
+        </div>
+        <!-- INDEX END -->
+
+        <h1><a name="synopsis">SYNOPSIS</a></h1>
+        <pre>
+<div class="code">
+     <span class="comment">
+     ##################                          ##################
+     ################## EXAMPLES OF SIMPLE USAGE ##################
+     ##################                          ##################
+     </span>
+     use Matrix;
+     my <span class="variable">$f</span> = new Genesis;
+     my <span class="variable">$matrix</span> = Matrix-&gt;new(<span class="variable">$f</span>, <span class="variable">$ptx_number</span>);
+     
+     <span class="comment">#example steps orig | pcb | orig_et</span>
+     <span class="comment">#want to create a cip step</span>
+     my <span class="variable">$cip</span> = <span class="variable">$matrix</span>-&gt;createStep('cip');
+     <span class="comment"># now the matrix looks like this orig | pcb | orig_et | cip </span>
+     my <span class="variable">$actual_cip</span> = <span class="variable">$matrix</span>-&gt;getStep('cip');
+     if (<span class="variable">$cip</span> == <span class="variable">$actual_cip</span>){
+          print &quot;that's not right\n&quot;;
+     }else{
+          print &quot;<span class="variable">$cip</span> and <span class="variable">$actual_cip</span> are two different objects\n&quot;;
+     }
+     <span class="comment">
+     # a note about the above...
+     #createStep('step_name') returns a new step object, but it's not the same one in the matrix
+     #so you can still do stuff with it (see Step documentation) but $matrix won't reflect those changes
+     #this is also the behavior of createLayer('layer_name') which I will explain in a sec.
+     
+     #now lets say you want to add 2a below 1a - given 1a already exists</span>
+     my <span class="variable">$layer</span> = <span class="variable">$matrix</span>-&gt;addLayer(NAME =&gt; '2a', LOC =&gt; 'below', REF =&gt; 1a);
+     <span class="comment">#by default the created layer is a misc signal layer so lets change it to a board layer</span>
+     $layer-&gt;setContext('board');
+     <span class="comment">#you know what... we need to add a pep layer too</span>
+     my <span class="variable">$layer2</span> = <span class="variable">$matrix</span>-&gt;addLayer(NAME =&gt; '2peptop', LOC =&gt; 'below', REF =&gt; 1a);
+     if (<span class="variable">$layer</span>-&gt;getRow() == <span class="variable">$layer2</span>-&gt;getRow()){
+          print &quot;what's going on here <span class="variable">$layer</span> shouldn't have the same row as <span
+        class="variable">$layer2</span>\n&quot;;
+     }
+     <span class="comment">
+     #you see what happened the Layer object returned by addLayer is not the same one as the one in $matrix
+     #this is the same layer until something gets changed in the matrix like a layer or step addition or deletion</span>
+     my <span class="variable">$layer_2a</span> = <span class="variable">$matrix</span>-&gt;getLayer('2a');
+     my <span class="variable">$layer_2peptop</span> = <span class="variable">$matrix</span>-&gt;getLayer('2peptop');
+     if (<span class="variable">$layer_2a</span>-&gt;getRow() != <span class="variable">$layer</span>-&gt;getRow()){
+          print &quot;do you see now?...\n&quot;;
+     }
+     my <span class="variable">$num_layers</span> = <span class="variable">$matrix</span>-&gt;numLayers();
+     <span class="comment">#lets delete layer 2peptop</span>
+     <span class="variable">$matrix</span>-&gt;deleteLayer('2peptop');
+     
+     printf &quot;before deleting 2peptop there were %d layers now there are %d\n&quot;, <span class="variable">$num_layers</span>,<span
+        class="variable">$matrix</span>-&gt;numLayers();
+     
+     my <span class="variable">$num_steps</span> = <span class="variable">$matrix</span>-&gt;numSteps();
+     <span class="comment">#lets delete cip step</span>
+     <span class="variable">$matrix</span>-&gt;deleteStep('cip');
+     
+     printf &quot;before deleting cip there were %d steps now there are %d\n&quot;, <span
+        class="variable">$num_steps</span>,<span class="variable">$matrix</span>-&gt;numSteps();
+</div>
+</pre>
+        <h1><a name="methods">METHODS</a></h1>
+        <dl>
+            <dt><strong><a name="new" class="item"><code>new</code></a></strong></dt>
+
+            <dd>
+                <p><em>new($f,'job_name') </em></p>
+                <p>Returns a new matrix object to interface Genesis with. <strong>$f</strong> is a required Genesis
+                    object, and
+                    <strong>job_name</strong> is a required existing job.</p>
+                <p>(Example: $matrix = Matrix-&gt;new(new Genesis, $some_ptx);)</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <h3><a name="__modifiers__">--Modifiers--</a></h3>
+        <dl>
+            <dt><strong><a name="createlayer" class="item"><code>createLayer</code></a></strong></dt>
+
+            <dd>
+                <p><em>createLayer('layer_name')</em></p>
+                <p>Takes the parameter <strong>'layer_name'</strong>, and adds a new layer to the last row in the
+                    matrix.</p>
+                <p>Returns the newly created layer. By default the layer will be a miscellaneous signal layer with
+                    positive
+                    polarity. This can easily
+                    be changed - see Layer documentation for details.</p>
+            </dd>
+            <dt><strong><a name="createstep" class="item"><code>createStep</code></a></strong></dt>
+
+            <dd>
+                <p><em>createStep('step_name')</em></p>
+                <p>Takes the parameter <strong>'step_name'</strong>, and adds a new step to the last column in the
+                    matrix.</p>
+                <p>Returns the newly created step.</p>
+            </dd>
+            <dt><strong><a name="addlayer" class="item"><code>addLayer</code></a></strong></dt>
+
+            <dd>
+                <p><em>addLayer(NAME =&gt;'layer_name', LOC =&gt; 'above|below', REF =&gt; 'existing_layer_name', ROW =&gt;
+                    row_number)</em></p>
+                <p>Takes the following parameters:</p>
+                <p>NAME =&gt; 'layer_name' - the name of the new layer to be added to the matrix.</p>
+                <p>LOC =&gt; 'above|below' - location in the matrix where the new layer will be placed; either above or
+                    below.</p>
+                <p>REF =&gt; 'existing_layer_name' - a name of a layer which is already in the matrix</p>
+                <p>ROW =&gt; row_number - a valid row number 1 &lt;= num layers/rows</p>
+                <p>NAME is a required parameter. if the other parameters are omitted it will behave the same as <a
+                        href="#createlayer"><code>createLayer()</code></a>.</p>
+                <p>Here is an example: Let's say we have a matrix with two rows. Row 1 is layer 1a and row 2 is layer
+                    4a.If I
+                    want to add layer 3a below
+                    layer 1a I would use the following:</p>
+                <p>addLayer(NAME =&gt; '3a', LOC =&gt; 'below', REF =&gt; '1a') or alternatively...</p>
+                <p>addLayer(NAME =&gt; '3a', LOC =&gt; 'below', ROW =&gt; 1)</p>
+                <p>Now there are 3 layers in the matrix, and lets add 2a above 3a. Use the following:</p>
+                <p>addLayer(NAME =&gt; '2a', LOC =&gt; 'above', REF =&gt; '3a') or alternatively...</p>
+                <p>addLayer(NAME =&gt; '2a', LOC =&gt; 'above', ROW =&gt; 3</p>
+                <p>Returns the newly created layer. By default the layer will be a miscellaneous signal layer with
+                    positive
+                    polarity. This can easily
+                    be changed - see Layer documentation for details.</p>
+            </dd>
+            <dt><strong><a name="addstep" class="item"><code>addStep</code></a></strong></dt>
+
+            <dd>
+                <p><em>addStep(NAME =&gt;'step_name', LOC =&gt; 'left|right', REF =&gt; 'existing_step_name', COL =&gt;
+                    column_number)</em></p>
+                <p>Takes the following parameters:</p>
+                <p>NAME =&gt; 'step_name' - the name of the new step to be added to the matrix.</p>
+                <p>LOC =&gt; 'left|right' - location in the matrix where the new step will be placed; either left or
+                    right.</p>
+                <p>REF =&gt; 'existing_step_name' - a name of a step which is already in the matrix</p>
+                <p>COL =&gt; column_number - a valid column number 1 &lt;= num steps/columns</p>
+                <p>NAME is a required parameter. if the other parameters are omitted it will behave the same as <a
+                        href="#createstep"><code>createStep()</code></a>.</p>
+                <p>Here is an example: Let's say we have a matrix with two columns. Col 1 is step orig and col 2 is step
+                    pcb.If
+                    I want to add step
+                    cip to the right of step pcb I would use the following:</p>
+                <p>addStep(NAME =&gt; 'cip', LOC =&gt; 'right', REF =&gt; 'pcb') or alternatively...</p>
+                <p>addStep(NAME =&gt; 'cip', LOC =&gt; 'right', COL =&gt; 2)</p>
+                <p>Now there are 3 steps in the matrix (orig,pcb,cip), and lets add orig_et to the left of cip. Use the
+                    following:</p>
+                <p>addStep(NAME =&gt; 'orig_et', LOC =&gt; 'left', REF =&gt; 'cip') or alternatively...</p>
+                <p>addStep(NAME =&gt; 'orig_et', LOC =&gt; 'left', COL =&gt; 3)</p>
+                <p>Returns the newly created step.</p>
+            </dd>
+            <dt><strong><a name="renamelayer" class="item"><code>renameLayer</code></a></strong></dt>
+
+            <dd>
+                <p><em>renameLayer('layer_name', 'new_name')</em></p>
+                <p>Takes the parameter <strong>'layer_name'</strong> and <strong>'new_name'</strong>, and renames the
+                    layer in
+                    the matrix. Returns nothing.</p>
+            </dd>
+            <dt><strong><a name="renamestep" class="item"><code>renameStep</code></a></strong></dt>
+
+            <dd>
+                <p><em>renameStep('step_name', 'new_name')</em></p>
+                <p>Takes the parameter <strong>'step_name'</strong> and <strong>'new_name'</strong>, and renames the
+                    step in the
+                    matrix. Returns nothing.</p>
+            </dd>
+            <dt><strong><a name="deletelayer" class="item"><code>deleteLayer</code></a></strong></dt>
+
+            <dd>
+                <p><em>deleteLayer('layer_name')</em></p>
+                <p>Takes the parameter <strong>'layer_name'</strong>, and removes the layer from the matrix. Returns
+                    nothing.
+                </p>
+            </dd>
+            <dt><strong><a name="deletestep" class="item"><code>deleteStep</code></a></strong></dt>
+
+            <dd>
+                <p><em>deleteLayer('step_name')</em></p>
+                <p>Takes the parameter <strong>'step_name'</strong>, and removes the step from the matrix. Returns
+                    nothing.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <h3><a name="__matrix_info__">--Matrix info--</a></h3>
+        <dl>
+            <dt><strong><a name="layerexists" class="item"><code>layerExists</code></a></strong></dt>
+
+            <dd>
+                <p><em>layerExists('layer_name')</em></p>
+                <p>Takes a layer name. Returns 1 if it exists in the matrix otherwise 0.</p>
+            </dd>
+            <dt><strong><a name="stepexists" class="item"><code>stepExists</code></a></strong></dt>
+
+            <dd>
+                <p><em>stepExists('step_name')</em></p>
+                <p>Takes a step name. Returns 1 if it exists in the matrix otherwise 0.</p>
+            </dd>
+            <dt><strong><a name="numlayers" class="item"><code>numLayers</code></a></strong></dt>
+
+            <dd>
+                <p><em>numLayers()</em></p>
+                <p>Takes no parameters. Returns the number of non-empty layers in the matrix.</p>
+            </dd>
+            <dt><strong><a name="numrows" class="item"><code>numRows</code></a></strong></dt>
+
+            <dd>
+                <p><em>numRows()</em></p>
+                <p>Takes no parameters. Returns the number of rows in the matrix, that is, the number of layers plus the
+                    number
+                    of empties.</p>
+            </dd>
+            <dt><strong><a name="numsteps" class="item"><code>numSteps</code></a></strong></dt>
+
+            <dd>
+                <p><em>numSteps()</em></p>
+                <p>Takes no parameters. Returns the number of non-empty steps in the matrix.</p>
+            </dd>
+            <dt><strong><a name="numcolumns" class="item"><code>numColumns</code></a></strong></dt>
+
+            <dd>
+                <p><em>numColumns()</em></p>
+                <p>Takes no parameters. Returns the number of columns, empty and non-empty, in the matrix</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <h3><a name="__getters__matrix_objects___">--Getters (matrix objects)--</a></h3>
+        <dl>
+            <dt><strong><a name="getlayer" class="item"><code>getLayer</code></a></strong></dt>
+
+            <dd>
+                <p><em>getLayer('layer_name')</em></p>
+                <p>Takes a <strong>layer_name</strong> and returns the layer object. If the layer is not in the matrix
+                    it
+                    will return an <em>undefined</em> object. See <em>Layer</em> documentation for usage
+                    of layer object.</p>
+                <p>The state of this object will not update as the matrix is changed. Subsequent calls to getLayer will
+                    need to
+                    be made to get
+                    an updated version.</p>
+            </dd>
+            <dt><strong><a name="getlayers" class="item"><code>getLayers</code></a></strong></dt>
+
+            <dd>
+                <p><em>getLayers()</em></p>
+                <p>Takes no parameters and returns an array of layer objects. See <em>Layer</em> documentation for usage
+                    of
+                    layer object.</p>
+            </dd>
+            <dt><strong><a name="getlayers2" class="item"><a href="#getlayers"><code>getLayers</code></a></a></strong>
+            </dt>
+
+            <dd>
+                <p><em>getLayers(%FILTERS)</em></p>
+                <p>Takes hash of filter options and returns an array of layer objects which match the filter
+                    options.</p>
+                <p>The following are valid filters. If any are omitted the filter option will be un-biased.Filter names
+                    are in
+                    all caps, and their
+                    values are strings. The values can be any combination of the valid options seperated by the vertical
+                    pipe
+                    &quot;|&quot;.</p>
+                <p>END_NAME =&gt; 'layer_name'</p>
+                <p>POLARITY =&gt; 'positive|negative'</p>
+                <p>START_NAME =&gt; 'layer_name'</p>
+                <p>TYPE =&gt; 'solder_paste|silk_screen|solder_mask|signal|mixed|power_ground|drill|rout|document'</p>
+                <p>ROW =&gt; 'an_existing_row_number'</p>
+                <p>CONTEXT =&gt; 'board|misc'</p>
+                <p>FOIL_SIDE =&gt; 'none|top|bottom'</p>
+                <p>SHEET_SIDE =&gt; 'none|top|bottom'</p>
+                <p>SIDE =&gt; 'top|bottom|inner'</p>
+                <p>Below is an example which will return an array of all the top and bottom board layers.</p>
+                <p>getLayers(SIDE =&gt; 'top|bottom', CONTEXT =&gt; 'board')</p>
+                <p>See <em>Layer</em> documentation for usage of layer object.</p>
+            </dd>
+            <dt><strong><a name="getstep" class="item"><code>getStep</code></a></strong></dt>
+
+            <dd>
+                <p><em>getStep('step_name')</em></p>
+                <p>Takes a <strong>step_name</strong> and returns the step object. See <em>Step</em> documentation for
+                    usage of
+                    step object.</p>
+                <p>The state of this object will not update as the matrix is changed. Subsequent calls to getStep will
+                    need to
+                    be made to get
+                    an updated version.</p>
+            </dd>
+            <dt><strong><a name="getsteps" class="item"><code>getSteps</code></a></strong></dt>
+
+            <dd>
+                <p><em>getSteps()</em></p>
+                <p>Takes no parameters and returns an array of step objects. See <em>Step</em> documentation for usage
+                    of step
+                    object.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <h3><a name="__debugging__">--Debugging--</a></h3>
+        <dl>
+            <dt><strong><a name="debugon" class="item"><code>debugOn</code></a></strong></dt>
+
+            <dd>
+                <p><em>debugOn()</em></p>
+                <p>Turns on debugging info.</p>
+            </dd>
+            <dt><strong><a name="debugoff" class="item"><code>debugOff</code></a></strong></dt>
+
+            <dd>
+                <p><em>debugOff()</em></p>
+                <p>Turns off debugging info.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="dependencies">DEPENDENCIES</a></h1>
+        <p>Layer</p>
+        <p>Step</p>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="author">AUTHOR</a></h1>
+        <p>Matthew Bundy</p>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+
+</html>

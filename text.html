@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text.pm</title>
+    <link rev="made" href="mailto:root@localhost"/>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div id="nav-placeholder"></div>
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+    <div class="content container">
+        <p class="mt-5"></p>
+        <h1><a name="name">Text.pm</a></h1>
+        <p>This drawing object is analogous to the Genesis add_text line mode command. The end
+            result is the same, but some of the functionality is assumed with the intention of
+            simplifying the usage.</p>
+
+        <hr/>
+
+        <!-- INDEX BEGIN -->
+        <div name="index">
+            <p><a name="__index__"></a></p>
+
+            <ul>
+
+                <li><a href="#name">NAME</a></li>
+                <li><a href="#synopsis">SYNOPSIS</a></li>
+                <ul>
+
+                    <li><a href="#methods">METHODS</a></li>
+                </ul>
+
+                <li><a href="#dependencies">DEPENDENCIES</a></li>
+                <li><a href="#author">AUTHOR</a></li>
+            </ul>
+
+            <hr name="index"/>
+        </div>
+        <!-- INDEX END -->
+
+
+        <h1><a name="synopsis">SYNOPSIS</a></h1>
+        <pre>
+     ##################                          ##################
+     ################## EXAMPLES OF SIMPLE USAGE ##################
+     ##################                          ##################
+     use Text;
+     use Genesis;
+     my $f = new Genesis;
+     
+     # in a real use the x and y would probably be different
+     my $x_loc = 0;
+     my $y_loc = 0;
+     
+     # create some text
+     # in this example angle and polarity are omitted because the defaults are fine
+     my $text = Text-&gt;new(origin =&gt; [$x_loc, $y_loc],
+                          size =&gt; 8,
+                          line_w =&gt; 60,
+                          text =&gt; &quot;P.T.I.S.&quot;,
+                          );
+     # in this one we will change the angle to 270 degrees
+     my $text2 = Text-&gt;new(origin =&gt; [$x_loc, $y_loc],
+                          size =&gt; 8,
+                          line_w =&gt; 60,
+                          text =&gt; &quot;P.T.I.S.&quot;,
+                          angle =&gt; 270
+                          );
+                    
+     #draw both of the text objects to the editor
+     $text-&gt;draw($f);
+     $text2-&gt;draw($f);</pre>
+        <p>
+        </p>
+        <h2><a name="methods">METHODS</a></h2>
+        <dl>
+            <dt><strong><a name="new" class="item"><code>new</code></a></strong></dt>
+
+            <dd>
+                <p><em>new(origin =&gt; [x,y], size = n_mils, line_w =&gt; n_mils, text =&gt; string, angle =&gt; deg,
+                    polarity =&gt;
+                    'positive')</em></p>
+                <p>Creates a new Text object. <strong>origin</strong> is a pair of x,y coordinates for the datum of the
+                    text. <strong>size</strong> is the width and height of the
+                    of the text (in mils) - it only supports having the same height and width. <strong>text</strong> is
+                    the actual text to be displayed. <strong>angle</strong> is
+                    optional, by default it is 0. <strong>polarity</strong> is optional, by default it is positive but
+                    can be <em>negative</em> if specified. Additionally,
+                    attributes are not used.</p>
+            </dd>
+            <dt><strong><a name="draw" class="item"><code>draw</code></a></strong></dt>
+
+            <dd>
+                <p><em>draw($f)</em></p>
+                <p>Adds the text in the current graphic editor window on the active layers. Takes a genesis object,
+                    which by convention is defined as
+                    <strong>$f</strong>. Has the default behavior as the line mode command <em>add_text</em>.</p>
+            </dd>
+            <dt><strong><a name="debugon_debugoff" class="item"><code>debugOn/debugOff</code></a></strong></dt>
+
+            <dd>
+                <p><em>debugOn()</em> <em>debugOff()</em></p>
+                <p>Turns off and on debugging info.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="dependencies">DEPENDENCIES</a></h1>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="author">AUTHOR</a></h1>
+        <p>Matthew Bundy</p>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+
+</html>

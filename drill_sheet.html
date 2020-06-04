@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DrillSheet.pm</title>
+    <link rev="made" href="mailto:root@localhost"/>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div id="nav-placeholder"></div>
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+    <div class="content container">
+        <p class="mt-5"></p>
+        <h1><a name="name">DrillSheet.pm</a></h1>
+        <p>Generates a drill sheet from all the drill layers that follow the standard naming convention.
+           &quot;ldi&quot;, &quot;laser&quot; and &quot;back-drill&quot; drill layers will be ignored.
+            A default tolerance of +/- 0.003&quot; will be used unless either of the plus or minus
+            tolerances are set in the drill table.
+        </p>
+
+        <hr/>
+
+        <!-- INDEX BEGIN -->
+        <div name="index">
+            <p><a name="__index__"></a></p>
+
+            <ul>
+
+                <li><a href="#name">NAME</a></li>
+                <li><a href="#synopsis">SYNOPSIS</a></li>
+                <ul>
+
+                    <li><a href="#methods">METHODS</a></li>
+                </ul>
+
+                <li><a href="#dependencies">DEPENDENCIES</a></li>
+                <li><a href="#author">AUTHOR</a></li>
+            </ul>
+
+            <hr name="index"/>
+        </div>
+        <!-- INDEX END -->
+
+
+        <h1><a name="synopsis">SYNOPSIS</a></h1>
+        <pre>
+     ##################                          ##################
+     ################## EXAMPLES OF SIMPLE USAGE ##################
+     ##################                          ##################
+     use DrillSheet;
+     my @drills = ();
+     # put all the relevant drill layers into the drills array
+     # the array drills is an array of arrays of strings and hashs
+     # for example...
+     # $drills[0] might equal ['d1', {TYPE =&gt; plated, shape =&gt; hole ...}, {TYPE =&gt; ...} ...]
+     # the first element in $drills[0] is the drill layer
+     # the following elements are all the tools (1..n)
+     # the outer loop assumes the drills layers are already in a logical order
+     # due to the fact that they are in the order in which they are found in the matrix
+     # this will be the order in which they are put on the drill sheet
+     my $i = 0;
+     foreach my $drill_layer ($job-&gt;getLayers(CONTEXT=&gt; 'board', TYPE=&gt; 'drill')) {
+          # skip layers that don't match the pattern 
+          next unless ($drill_layer =~ /^p[0-9]|^d/);
+          push (@drills, [$drill_layer]);
+          my $toolq = $ENV{STEP} . &quot;DRILL&quot; . $drill_layer;
+          foreach my $t (keys %{$job-&gt;{$toolq}}){
+               next unless ($t =~/TOOL/i);
+               push (@{$drills[$i]}, $job-&gt;{$toolq}{$t});
+          }
+          my $sorter = DrillToolSorter-&gt;new();
+          # here I am sorting the tools which is the sub array $drills[i][1..(length of $drills[i] - 1)]; it's length of $drills[i] - 1
+          # because the first element is the drill layer - which can't be sorted by the sorter
+          @{$drills[$i]}[1..(@{$drills[$i]}-1)] = $sorter-&gt;sortBy($sortMethod, @{$drills[$i]}[1..(@{$drills[$i]}-1)]);
+          $i++;
+     }
+     my $workbook = Excel::Writer::XLSX-&gt;new($drl_plt_info_sh);
+     my $drill_sheet = DrillSheet-&gt;new(PTX =&gt; $ENV{JOB},
+                                       CUSTOMER =&gt; $cim_cust_info[0],
+                                       PART_NUMBER =&gt; $cim_cust_info[1],
+                                       REVISION =&gt; $cim_cust_info[2],
+                                       THICKNESS =&gt; $thickness,
+                                       FINISH =&gt; $cim_cust_info[5],
+                                       DRILLS =&gt; \@drills,
+                                       JOB_MOD =&gt; $job,
+                                       IMPEDANCE =&gt; $has_impedance_step);
+     #$drill_sheet-&gt;debugOn();
+     $drill_sheet-&gt;write($workbook);</pre>
+        <p>
+        </p>
+        <h2><a name="methods">METHODS</a></h2>
+        <dl>
+            <dt><strong><a name="new" class="item"><code>new</code></a></strong></dt>
+
+            <dd>
+                <p><em>new(%params)</em></p>
+                <p>Creates a new drill sheet object.</p>
+                <p>The following parameters are required:</p>
+                <p>PTX =&gt; $ptx # this will be displayed on the drill sheet</p>
+                <p>CUSTOMER =&gt; $customer_name</p>
+                <p>PART_NUMBER =&gt; $customer_partnumber</p>
+                <p>REVISION =&gt; $part_revision</p>
+                <p>THICKNESS =&gt; $thickness</p>
+                <p>FINISH =&gt; $surface_finish # this will go in the notes section</p>
+                <p>DRILLS =&gt; \@drills # special formatting below</p>
+                <p>JOB_MOD =&gt; $job # a Job object</p>
+                <p>IMPEDANCE =&gt; $has_impedance_step # 1 | 0 - indicates if the job has impedance or not</p>
+                <p>the drills array needs to be formatted as such:</p>
+                <p>([$drill_layer_name1, {DRILL_SIZE=&gt;tool1_drill_size, FINISH_SIZE=&gt;tool1_finish_size, MIN_TOL=&gt;tool1_minus_tolerance,
+                    MAX_TOL=&gt;tool1_plus_tolerance},
+                    {DRILL_SIZE=&gt;tool2_drill_size, FINISH_SIZE=&gt;tool2_finish_size, MIN_TOL=&gt;tool2_minus_tolerance,
+                    MAX_TOL=&gt;tool2_plus_tolerance}...],
+                    [$drill_layer_name2]...
+                    )</p>
+            </dd>
+            <dt><strong><a name="write" class="item"><code>write</code></a></strong></dt>
+
+            <dd>
+                <p><em>write(Excel::Writer::XLSX workbook)</em></p>
+                <p>This does all of the work. After creating the object, call write and pass a workbook as a parameter.
+                    The
+                    object will use all
+                    the information that was provided in the parameters when creating a <a href="#new"><code>new</code></a>
+                    object.</p>
+            </dd>
+            <dt><strong><a name="debugon" class="item"><code>debugOn</code></a></strong></dt>
+
+            <dd>
+                <p><em>debugOn()</em></p>
+                <p>Turns on helpful print statements for debugging. The default is off.</p>
+            </dd>
+            <dt><strong><a name="debugoff" class="item"><code>debugOff</code></a></strong></dt>
+
+            <dd>
+                <p><em>debugOff()</em></p>
+                <p>This is the default behavior upon initialization. It will not print debug statements.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="dependencies">DEPENDENCIES</a></h1>
+        <p>Carp</p>
+        <p>Data::Dumper</p>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="author">AUTHOR</a></h1>
+        <p>Matthew Bundy</p>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+
+</html>

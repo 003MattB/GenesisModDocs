@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Step.pm</title>
+    <link rev="made" href="mailto:root@localhost"/>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div id="nav-placeholder"></div>
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+    <div class="content container">
+        <p class="mt-5"></p>
+        <h1><a name="name">Step.pm</a></h1>
+        <p>Used to help with scripts associated with Genesis on actions related to the step as part of the
+        matrix.
+        </p>
+
+        <hr/>
+
+        <!-- INDEX BEGIN -->
+        <div name="index">
+            <p><a name="__index__"></a></p>
+
+            <ul>
+
+                <li><a href="#name">NAME</a></li>
+                <li><a href="#synopsis">SYNOPSIS</a></li>
+                <ul>
+
+                    <li><a href="#methods">METHODS</a></li>
+                </ul>
+
+                <li><a href="#dependencies">DEPENDENCIES</a></li>
+                <li><a href="#author">AUTHOR</a></li>
+            </ul>
+
+            <hr name="index"/>
+        </div>
+        <!-- INDEX END -->
+
+        <h1><a name="synopsis">SYNOPSIS</a></h1>
+        <pre>
+     ##################                          ##################
+     ################## EXAMPLES OF SIMPLE USAGE ##################
+     ##################                          ##################
+     use Step;
+     use Genesis;
+     use Job;
+     my $f = new Genesis;
+     my $job = Job-&gt;new(PTX =&gt; $ENV{JOB}, GENESIS =&gt; $f);
+     #creating a new object
+     my $step = Step-&gt;new(JOB_MOD =&gt; $job NAME =&gt; 'step_name');
+     
+     #open the editor in pop up mode
+     $step-&gt;open();
+     
+     #open the editor in the background
+     $step-&gt;open(1);
+     
+     #you have multiple editors open? set the scope of the script to the step
+     #note: this is automatically done after opening the editor
+     $step-&gt;setGroup();
+     
+     #now close the step
+     $step-&gt;close();
+     
+     #done working with the current step?
+     #lets work on a different one
+     $step-&gt;{NAME} = 'foo';
+     
+     #foo isn't in the matrix?
+     #create it!
+     $step-&gt;create();
+     
+     #don't like the name foo?
+     #rename it!
+     $step-&gt;rename('bar');</pre>
+        <p>
+        </p>
+        <h2><a name="methods">METHODS</a></h2>
+        <dl>
+            <dt><strong><a name="new" class="item"><code>new</code></a></strong></dt>
+
+            <dd>
+                <p><em>new(JOB_MOD =&gt; 'job_module_object', NAME =&gt; 'step_name') </em></p>
+                <p>Takes two parameters <strong>'job_module_object'</strong> and <strong>'step_name'</strong>.
+                    Returns a new Step object.</p>
+            </dd>
+            <dt><strong><a name="stepexists" class="item"><code>stepExists</code></a></strong></dt>
+
+            <dd>
+                <p><em>stepExists('layer_name')</em></p>
+                <p>Takes a <strong>layer</strong> as a parameter.
+                    Returns <strong>0</strong> if false, or <strong>1</strong> if true.</p>
+            </dd>
+            <dt><strong><a name="open" class="item"><code>open</code></a></strong></dt>
+
+            <dd>
+                <p><em>open()</em></p>
+                <p>Takes an optional boolean (<strong>1</strong>|<strong>0</strong>) parameter.
+                    Opens an editor window and sets the scope of the script to control this step.
+                    If 1 is passed in then it will open an editor in iconic mode.
+                    Iconic mode is like hidden, or in the background.
+                    If 0, or no parameter is passed, the editor window will pop up.
+                    Returns nothing.</p>
+            </dd>
+            <dt><strong><a name="close" class="item"><code>close</code></a></strong></dt>
+
+            <dd>
+                <p><em>close()</em></p>
+                <p>Takes no parameters.
+                    Closes the editor window.
+                    Returns nothing.</p>
+            </dd>
+            <dt><strong><a name="create" class="item"><code>create</code></a></strong></dt>
+
+            <dd>
+                <p><em>create()</em></p>
+                <p>Takes no parameters. Creates a new step in the matrix (given the step isn't already there).
+                    Note, the step will be in the last column of the matrix.
+                    Returns <strong>1</strong> if successful else <strong>0</strong>.</p>
+            </dd>
+            <dt><strong><a name="add" class="item"><code>add</code></a></strong></dt>
+
+            <dd>
+                <p><em>add(loc =&gt; 'left|right', ref =&gt; 'existing_step_name', col =&gt; column_number) </em></p>
+                <p>Takes up to three optional parameters. If none are given, then it behaves like
+                    <strong>create()</strong>.
+                    <strong>loc</strong> defines where, in the matrix, in relation to either <strong>ref</strong> or
+                    <strong>col</strong> where the step will be created.
+                    It might be easier just to see some examples...<br>
+                    Say the matrix looks like this -&gt; |orig|pcb|orig_et|<br>
+                    to begin with. orig is column 1 and orig_et is column 3.
+                    Here is what it will look like after the following commands (lets assume {NAME} is cip)...<br>
+                    <em>add() </em> #behaves just like <a href="#create"><code>create()</code></a><br>
+                    |orig|pcb|orig_et|cip|<br>
+                    <em>add(loc =&gt; 'left', ref =&gt; 'pcb')</em> #add cip to the left of pcb<br>
+                    |orig|cip|pcb|orig_et|<br>
+                    <em>add(loc =&gt; 'right', col =&gt; 2)</em> #add cip to the right of pcb using col instead<br>
+                    orig|pcb|cip|orig_et|</p>
+            </dd>
+            <dt><strong><a name="delete" class="item"><code>delete</code></a></strong></dt>
+
+            <dd>
+                <p><em>delete()</em></p>
+                <p>Takes no parameters. Removes the step from the matrix if it exists.
+                    Returns <strong>1</strong> if successful else <strong>0</strong>.</p>
+            </dd>
+            <dt><strong><a name="rename" class="item"><code>rename</code></a></strong></dt>
+
+            <dd>
+                <p><em>rename('new_name')</em></p>
+                <p>Takes one parameter <strong>'new_name'</strong>, renames the step in the matrix, and updates the
+                    instance
+                    variable
+                    {NAME} accordingly
+                    Returns the name of the step.</p>
+            </dd>
+            <dt><strong><a name="setgroup" class="item"><code>setGroup</code></a></strong></dt>
+
+            <dd>
+                <p><em>setGroup()</em></p>
+                <p>Takes no parameters. It changes the scope of the script to the step. Returns <strong>group
+                    number</strong>.
+                </p>
+            </dd>
+            <dt><strong><a name="getdatumlocation" class="item"><code>getDatumLocation</code></a></strong></dt>
+
+            <dd>
+                <p><em>getDatumLocation()</em></p>
+                <p>Takes no parameters. Returns a hash reference. $hashref-&gt;{'x'} = <strong>x_location</strong>
+                    $hashref-&gt;{'y'}
+                    = <strong>y_location</strong></p>
+            </dd>
+
+            <dt><strong><a name="getname" class="item"><code>getName</code></a></strong></dt>
+
+            <dd>
+                <p><em>getName()</em></p>
+                <p>Takes no parameters. Returns the name of the step.</p>
+            </dd>
+
+            <dt><strong><a name="getcolumn" class="item"><code>getColumn</code></a></strong></dt>
+
+            <dd>
+                <p><em>getColumn()</em></p>
+                <p>Takes no parameters. Returns the column number of the step.</p>
+                <p>1 &lt;= column number</p>
+            </dd>
+
+            <dt><strong><a name="setdatum" class="item"><code>setDatum</code></a></strong></dt>
+
+            <dd>
+                <p><em>setDatum(x, y) </em></p>
+                <p>Takes two parameters <strong>x</strong> and <strong>y</strong> in that order. Returns an array.
+                    $array[0] =
+                    x, $array[1] = y.</p>
+            </dd>
+            <dt><strong><a name="hasprofile" class="item"><code>hasProfile</code></a></strong></dt>
+
+            <dd>
+                <p><em>hasProfile()</em></p>
+                <p>Takes no parameters. Returns a the <strong>profile length</strong> if it has a profile - which will
+                    evaluate
+                    to true in a boolean
+                    context - otherwise it will return <strong>0</strong>.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="dependencies">DEPENDENCIES</a></h1>
+        <p>Carp</p>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="author">AUTHOR</a></h1>
+        <p>Matthew Bundy</p>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+
+</html>

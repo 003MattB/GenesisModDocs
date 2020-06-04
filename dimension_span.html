@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DimensionSpan.pm</title>
+    <link rev="made" href="mailto:root@localhost"/>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div id="nav-placeholder"></div>
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+    <div class="content container">
+        <p class="mt-5"></p>
+        <h1><a name="name">DimensionSpan.pm</a></h1>
+        <p>A DimensionSpan, like other objects in the drawing class, is just like a Genesis feature.
+            The syntax to use is a little different, but similar. One difference, however, is that
+            a the drawing object (DimensionSpan) is added in two steps. First it must be created with
+            the <strong>new</strong> method, then it is added using the <strong>draw</strong> method.
+            It is done in two steps
+            because it is composed of multiple features and there is some stuff going on in the
+            background. Additionally, this way all drawing objects can be put in a cache (such as an array)
+            and be drawn all at once at a later time.</p>
+        <p>
+        </p>
+
+        <div class="m-auto"><img class="center-block" src="img/dimension-span.png"/></div>
+        <hr/>
+
+        <!-- INDEX BEGIN -->
+        <div name="index">
+            <p><a name="__index__"></a></p>
+
+            <ul>
+
+                <li><a href="#name">NAME</a></li>
+                <li><a href="#synopsis">SYNOPSIS</a></li>
+                <ul>
+
+                    <li><a href="#methods">METHODS</a></li>
+                </ul>
+
+                <li><a href="#dependencies">DEPENDENCIES</a></li>
+                <li><a href="#author">AUTHOR</a></li>
+            </ul>
+
+            <hr name="index"/>
+        </div>
+        <!-- INDEX END -->
+        <h1><a name="synopsis">SYNOPSIS</a></h1>
+        <pre>
+     ##################                          ##################
+     ################## EXAMPLES OF SIMPLE USAGE ##################
+     ##################                          ##################
+     use DimensionSpan;
+     use Genesis;
+     my $f = new Genesis;
+     
+     # get some dimensions and figure out the datum point for the span
+     # ...
+     foreach my $dim (@dimensions) {
+          # make the span and draw it
+          # assumes graphic editor is already open and a layer is affected
+          my $span = DimensionSpan-&gt;new(origin =&gt; [$dim{x},$dim{y}],
+                                        width =&gt; $dim{width}, 
+                                        angle =&gt; 0, 
+                                        text_size =&gt; &quot;xl&quot;);
+          $span-&gt;draw($f);
+     }</pre>
+        <p>
+        </p>
+        <h2><a name="methods">METHODS</a></h2>
+        <dl>
+            <dt><strong><a name="new" class="item"><code>new</code></a></strong></dt>
+
+            <dd>
+                <p><em>new(origin =&gt; [x,y], width =&gt; x_inch, angle =&gt; deg, text_size =&gt; &quot;l&quot;)</em>
+                </p>
+                <p>Creates a new DimensionSpan object. The origin is the lower left of the dimension span, and it is
+                    rotated
+                    <strong>deg</strong> about the origin.
+                    The <strong>width</strong> will displayed to 4 digits. The default <strong>text_size</strong> is
+                    &quot;l&quot;
+                    and the available options are as follows...</p>
+                <p>option | definition</p>
+                <p>&quot;xs&quot; -&gt; x,y = 30 lw = 4</p>
+                <p>&quot;s&quot; -&gt; x,y = 50 lw = 6</p>
+                <p>&quot;m&quot; -&gt; x,y = 80 lw = 8</p>
+                <p>&quot;l&quot; -&gt; x,y = 100 lw = 10</p>
+                <p>&quot;xl&quot; -&gt; x,y = 150 lw = 15</p>
+                <p>The only angles allowed are 0, 90, 180, and 270.</p>
+            </dd>
+            <dt><strong><a name="draw" class="item"><code>draw</code></a></strong></dt>
+
+            <dd>
+                <p><em>draw($f)</em></p>
+                <p>Adds the dimension span in the current graphic editor window on the active layer(s). Takes a genesis
+                    object,
+                    which by convention is defined as <strong>$f</strong>.</p>
+            </dd>
+            <dt><strong><a name="debugon_debugoff" class="item"><code>debugOn/debugOff</code></a></strong></dt>
+
+            <dd>
+                <p><em>debugOn()</em> <em>debugOff()</em></p>
+                <p>Turns off and on debugging info.</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="dependencies">DEPENDENCIES</a></h1>
+        <p>genesis/tools/drawing/Line
+            genesis/tools/drawing/Triangle
+            genesis/tools/drawing/Text</p>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="author">AUTHOR</a></h1>
+        <p>Matthew Bundy</p>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+
+</html>
