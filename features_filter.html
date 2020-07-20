@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FeaturesFilter.pm</title>
+    <link rev="made" href="mailto:root@localhost"/>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+
+<body>
+<div class="wrapper">
+    <div id="nav-placeholder"></div>
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+
+    <div class="content container">
+        <p class="mt-5"></p>
+        <h1><a name="name">FeaturesFilter.pm</a></h1>
+        <p>FeaturesFilter.pm - A convenient interface for the Features Filter Popup. It provides default parameters and
+            common filter sets to
+            reduce the amount of code needed to select features.</p>
+        <hr/>
+
+        <!-- INDEX BEGIN -->
+        <div name="index">
+            <p><a name="__index__"></a></p>
+
+            <ul>
+
+                <li><a href="#name">NAME</a></li>
+                <li><a href="#synopsis">SYNOPSIS</a></li>
+                <ul>
+
+                    <li><a href="#methods">METHODS</a></li>
+                </ul>
+
+                <li><a href="#dependencies">DEPENDENCIES</a></li>
+                <li><a href="#author">AUTHOR</a></li>
+            </ul>
+
+            <hr name="index"/>
+        </div>
+        <!-- INDEX END -->
+
+        <h1><a name="synopsis">SYNOPSIS</a></h1>
+        <pre>
+     ##################                          ##################
+     ################## EXAMPLES OF SIMPLE USAGE ##################
+     ##################                          ##################
+     use FeaturesFilter;
+     use Genesis;
+     
+     my $f = new Genesis;
+     my $filter = FeaturesFilter-&gt;new($f);
+     $filter-&gt;debugOn();
+     # do some stuff
+     # .
+     # . 
+     # .
+
+     # it's a good idea to reset the filter before use
+     # a user might already have features filtered unbeknownst to the programmer
+     $filter-&gt;reset();
+     
+     # only select the positive features that are not surfaces
+     # note quotes can be omitted from parameter keys but I tend to use them 
+     # to avoid accidental use of keywords or barewords 
+     # ('polarity' =&gt;  is equivelatnt to polarity =&gt;)
+     $filter-&gt;set('polarity' =&gt; 'positive', 'feat_types' =&gt; 'line;pad;arc;text');
+     
+     # assuming layers are already affected
+     my $select_count = $filter-&gt;select();
+     
+     if ($select_count == 0) {
+          print &quot;there are no features that meet the critera on the affected layers\n&quot;;
+     } else {
+          $f-&gt;PAUSE($select_count . &quot; Features selected&quot;);
+     }
+     
+     # now select some negative lines
+     $filter-&gt;set('polarity' =&gt; 'negative', 'feat_types' =&gt; 'line');
+     my $count = $filter-&gt;select();
+     
+     # select() doesn't clear the selection so whatever was selected before will be
+     # included in the new selection
+     my $neg_line_count = $count - $select_count;
+     
+     # unselect everything
+     $filter-&gt;unselect(1);
+
+     # highlight the surfaces
+     $filter-&gt;set('polarity' =&gt; 'positive', 'feat_types' =&gt; 'surface');
+     $filter-&gt;highlight();
+     
+     $f-&gt;PAUSE(&quot;Look at the highlighted surfaces... Nothing is selected right now&quot;);
+     
+     $filter-&gt;turnOffHighlight();
+     
+     # demonstrate the use of the activate funcion
+     $filter-&gt;reset();
+     $filter-&gt;set('include_syms' =&gt; 'r10.1;r10.2;r30.1;r30.2');
+     $filter-&gt;deactivate();
+     $filter-&gt;select();
+     
+     $f-&gt;PAUSE(&quot;I bet you expeted only r10.1, r10.2, r30.1 and r30.2 to be selected right now&quot;);
+     
+     $filter-&gt;unselect(1);
+     $filter-&gt;activate();
+     $filter-&gt;select();
+     
+     $f-&gt;PAUSE(&quot;ahh thats more like it&quot;);
+     
+     # one last thing to note
+     # after resetting the filter it will be back to program defaults
+     # so if you select now all the features will be selected
+     $filter-&gt;reset();
+     $filter-&gt;select();
+     $f-&gt;PAUSE(&quot;All features are selected now&quot;);
+     
+     # when you're done it's good practice to reset the filter
+     $filter-&gt;reset();
+        </pre>
+        <p>
+        </p>
+        <h2><a name="methods">METHODS</a></h2>
+        <dl>
+            <dt><strong><a name="_f" class="item"><code>$f</code></a></strong></dt>
+
+            <dd>
+                <p>$f is used throughout this documentation. Assume it is a Genesis object as that is the typical
+                    variable name used in scripts for it.
+                    Ex. $f = new Genesis; It only needs to be instantiated once at the begining of the script.</p>
+            </dd>
+            <dt><strong><a name="new" class="item"><code>new</code></a></strong></dt>
+
+            <dd>
+                <p><em>new()</em></p>
+                <p>Returns a new FeaturesFilter object. Takes no parameters.</p>
+            </dd>
+            <dt><strong><a name="set" class="item"><code>set</code></a></strong></dt>
+
+            <dd>
+                <p><em>set(%parameters)</em></p>
+                <p>Sets the popup filter with the given parameters. It is non-cumulative so multiple function calls will
+                    replace values.
+                    If %parameters is not given or is empty the default parameters will be set. If the default
+                    parameters are not desired then they
+                    must be explicitly set, otherwise they will be set regardless. Note: all the parameter values are
+                    strings. Note2: if any
+                    parameters are omitted the default value will be used (defined below) or the value will not change
+                    from its prior value.</p>
+                <p>Default parameters:</p>
+                <p>'update_popup' : 'Yes' # I recommend keeping it 'Yes' so if the filter is not reset before the script
+                    exits the user will be able
+                    to see what filters are set in the popup.</p>
+                <p>'active' : 'Yes' # if value equals 'No' the filters won't be used, essentially the same as having no
+                    filters</p>
+                <p>Other parameters and descriptions: (name : description - possible values)</p>
+                <p>'update_popup' : Will show changes in the GUI - 'Yes' or 'No'</p>
+                <p>'active' : Determines if the filter will be used - 'Yes' or 'No'</p>
+                <p>'feat_types' : Detetermines the types of features to be selected - line, pad, surface, arc, or text
+                    Note: to combine multiple feature types seperate by a semicolon ';' i.e. 'line;pad;surface'</p>
+                <p>'polarity' : Determines the polarity of features to be selected - positive or negative</p>
+                <p>'include_syms' : A list (string) of features to include seperated by a semicolon ';' - any legal
+                    features/wildcards (*)/or ranges i.e.
+                    'r0:r100'</p>
+                <p>'exclude_syms' : A list (string) of features to exclude from the selection - the same as
+                    include_syms</p>
+                <p>'profile' : The area to be included in the selection - All (ignore the profile), In (features inside
+                    the profile) or Out
+                    (features outside the profile)</p>
+                <p>Returns 1 if the filter was set successfuly. Returns 0 and carps a warning if the filter was
+                    unsuccessfuly set. Unsuccessful
+                    attempts occur when an invalid parameter is passed to the function or filter_name is in the
+                    parameter list.</p>
+            </dd>
+            <dt><strong><a name="select" class="item"><code>select</code></a></strong></dt>
+
+            <dd>
+                <p><em>select()</em></p>
+                <p>Selects the features that have been filtered (if any) on the affected layers in the current graphic
+                    editor. It returns the number of
+                    features that are selected. Note: the return value doesn't necessarily represent the features that
+                    were selected during the most
+                    recent operation. If features were already selected they will be included in the return value
+                    because the selection is not reset by
+                    this function.</p>
+            </dd>
+            <dt><strong><a name="unselect" class="item"><code>unselect</code></a></strong></dt>
+
+            <dd>
+                <p><em>unselect(n)</em></p>
+                <p>Unselects the features on the affected layers in the current graphic editor. Only works on features
+                    that are within the scope of the
+                    filter. It takes an optional parameter n; if n evaluates to true (ie 1) then all features will be
+                    unselected regardless of the
+                    filter. Eg. <a href="#unselect"><code>unselect(1)</code></a></p>
+                <p>No return value.</p>
+            </dd>
+            <dt><strong><a name="highlight" class="item"><code>highlight</code></a></strong></dt>
+
+            <dd>
+                <p><em>highlight()</em></p>
+                <p>Highlights the filtered features on the affected layers.</p>
+            </dd>
+            <dt><strong><a name="turnoffhighlight" class="item"><code>turnOffHighlight</code></a></strong></dt>
+
+            <dd>
+                <p><em>turnOffHighlight()</em></p>
+                <p>Clears the highlighted features.</p>
+            </dd>
+            <dt><strong><a name="reset" class="item"><code>reset</code></a></strong></dt>
+
+            <dd>
+                <p><em>reset()</em></p>
+                <p>Resets the filter set so that the filter is empty.</p>
+            </dd>
+            <dt><strong><a name="activate" class="item"><code>activate</code></a></strong></dt>
+
+            <dd>
+                <p><em>activate()</em></p>
+                <p>Enables the use of the filter. It is not necessary to call this function if the filter is already
+                    active. It is only a wrapper
+                    function for set('active' =&gt; 'Yes')</p>
+            </dd>
+            <dt><strong><a name="deactivate" class="item"><code>deactivate</code></a></strong></dt>
+
+            <dd>
+                <p><em>deactivate()</em></p>
+                <p>Disables the use of the filter. It can be used to select all features on active layers without having
+                    to reset the filter. This is
+                    also a wrapper function for set('active' =&gt; 'No')</p>
+            </dd>
+        </dl>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="dependencies">DEPENDENCIES</a></h1>
+        <p>Carp
+            Dumper</p>
+        <p>
+        </p>
+        <hr/>
+        <h1><a name="author">AUTHOR</a></h1>
+        <p>Matthew Bundy</p>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
