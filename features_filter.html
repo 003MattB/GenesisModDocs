@@ -51,6 +51,11 @@
         <!-- INDEX END -->
 
         <h1><a name="synopsis">SYNOPSIS</a></h1>
+        <h6>A note about <strong><a name="_f" class="item"><code>$f</code></a></strong></h6>
+
+        <p>$f is used throughout this documentation. Assume it is a Genesis object as that is the typical
+            variable name used in scripts for it.
+            Ex. $f = new Genesis; It only needs to be instantiated once at the beginning of the script.</p>
         <pre>
      ##################                          ##################
      ################## EXAMPLES OF SIMPLE USAGE ##################
@@ -73,7 +78,7 @@
      # only select the positive features that are not surfaces
      # note quotes can be omitted from parameter keys but I tend to use them 
      # to avoid accidental use of keywords or barewords 
-     # ('polarity' =&gt;  is equivelatnt to polarity =&gt;)
+     # ('polarity' =&gt;  is equivalent to polarity =&gt;)
      $filter-&gt;set('polarity' =&gt; 'positive', 'feat_types' =&gt; 'line;pad;arc;text');
      
      # assuming layers are already affected
@@ -132,20 +137,14 @@
         </p>
         <h2><a name="methods">METHODS</a></h2>
         <dl>
-            <dt><strong><a name="_f" class="item"><code>$f</code></a></strong></dt>
 
-            <dd>
-                <p>$f is used throughout this documentation. Assume it is a Genesis object as that is the typical
-                    variable name used in scripts for it.
-                    Ex. $f = new Genesis; It only needs to be instantiated once at the begining of the script.</p>
-            </dd>
             <dt><strong><a name="new" class="item"><code>new</code></a></strong></dt>
 
             <dd>
                 <p><em>new()</em></p>
                 <p>Returns a new FeaturesFilter object. Takes no parameters.</p>
             </dd>
-            <dt><strong><a name="set" class="item"><code>set</code></a></strong></dt>
+            <dt><strong><a id="set-func" name="set" class="item"><code>set</code></a></strong></dt>
 
             <dd>
                 <p><em>set(%parameters)</em></p>
@@ -229,7 +228,7 @@
                 <p><em>activate()</em></p>
                 <p>Enables the use of the filter. It is not necessary to call this function if the filter is already
                     active. It is only a wrapper
-                    function for set('active' =&gt; 'Yes')</p>
+                    function for <a class="text-info" href="#set-func">set('active' =&gt; 'Yes')</a></p>
             </dd>
             <dt><strong><a name="deactivate" class="item"><code>deactivate</code></a></strong></dt>
 
@@ -237,7 +236,7 @@
                 <p><em>deactivate()</em></p>
                 <p>Disables the use of the filter. It can be used to select all features on active layers without having
                     to reset the filter. This is
-                    also a wrapper function for set('active' =&gt; 'No')</p>
+                    also a wrapper function for <a class="text-info" href="#set-func">set('active' =&gt; 'No')</a></p>
             </dd>
         </dl>
         <p>

@@ -35,8 +35,7 @@
                 <ul>
 
                     <li><a href="#methods_inherited_from_abstractsorter___see_documentation_for_details">METHODS
-                        INHERITED FROM
-                        AbstractSorter - SEE DOCUMENTATION FOR DETAILS</a></li>
+                        INHERITED FROM AbstractSorter</a></li>
                     <li><a href="#sort_methods">sort METHODS</a></li>
                 </ul>
 
@@ -62,7 +61,8 @@
         <p>
         </p>
         <h2><a name="methods_inherited_from_abstractsorter___see_documentation_for_details">METHODS INHERITED FROM
-            AbstractSorter - SEE DOCUMENTATION FOR DETAILS</a></h2>
+            AbstractSorter - SEE <a class="text-info" href="abstract_sorter.html" target="_blank">DOCUMENTATION</a>
+            FOR DETAILS</a></h2>
         <dl>
             <dt><strong><a name="new" class="item"><code>new</code></a></strong></dt>
 
@@ -97,55 +97,52 @@
                 <p>Returns a sorted list of drill tools by drill size. In the case that two drill tools have the same
                     drill size
                     it falls back on finish size.</p>
-                <p>See SYNOPSIS for detailed usage.</p>
+                <p>See <a class="text-info" href="#synopsis">SYNOPSIS</a> for detailed usage.</p>
             </dd>
             <dt><strong><a name="sortby2" class="item"><a href="#sortby"><code>sortBy</code></a></a></strong></dt>
 
             <dd>
                 <p><em>sortBy(&quot;NPTLast&quot;,@drillTools) </em></p>
-                <p>Takes a list of drill tools. Each tool is a hash with the following structure:</p>
-                <p>$t-&gt;{
-                    'TYPE' =&gt; '(hole-finish)',
-                    'SHAPE' =&gt; '(hole|slot)',
-                    'TOOL_NUM' =&gt; '(#)',
-                    'MIN_TOL' =&gt; '(#)',
-                    'MAX_TOL' =&gt; '(#)',
-                    'DRILL_SIZE' =&gt; '(#)',
-                    'COUNT' =&gt; '(#)',
-                    'FINISH_SIZE' =&gt; '(#)'
-                    }</p>
                 <p>Returns a sorted list of drill tools by drill size. In the case that two drill tools have the same
                     drill size
                     it falls back on finish size. Non-plated holes will come last (sorted in the same fashion)</p>
-                <p><em>sortBy(&quot;NPTFirst&quot;,@drillTools)</em>
-                    Returns a sorted list of drill tools by drill size. In the case that two drill tools have the same
+                <p><em>sortBy(&quot;NPTFirst&quot;,@drillTools)</em></p>
+                <p>Returns a sorted list of drill tools by drill size. In the case that two drill tools have the
+                    same
                     drill
                     size
                     it falls back on finish size. Non-plated holes will come first (sorted in the same fashion)</p>
-                <p><em>sortBy(&quot;CountASC&quot;,@drillTools) </em>
-                    Returns a sorted list of drill tools by count in ascending order, that's tool sizes with the fewest
+                <p><em>sortBy(&quot;FinishSize&quot;,@drillTools)</em></p>
+                <p>Returns a sorted list of drill tools by finish size.</p>
+                <p><em>sortBy(&quot;CountASC&quot;,@drillTools) </em></p>
+                <p>Returns a sorted list of drill tools by count in ascending order, that's tool sizes with the
+                    fewest
                     counts
                     first.
                     In the case that two drill sizes have the same count it will fall back on drill size in ascending
                     order.</p>
-                <p><em>sortBy(&quot;CountDSC&quot;,@drillTools) </em>
-                    Returns a sorted list of drill tools by count in descending order, that's tool sizes with the
+                <p><em>sortBy(&quot;CountDSC&quot;,@drillTools) </em></p>
+                <p>Returns a sorted list of drill tools by count in descending order, that's tool sizes with the
                     greatest
                     counts first.
                     In the case that two drill sizes have the same count it will fall back on drill size in ascending
                     order.</p>
-                <p><em>sortBy(&quot;ToolASC&quot;,@drillTools) </em>
-                    Returns a sorted list of drill tools by tool number in ascending order. Note tool numbers are
+                <p><em>sortBy(&quot;Descending&quot;,@drillTools)</em></p>
+                <p>Returns a sorted list of drill tools by drill size. In the case that two drill tools have the
+                    same
+                    drill
+                    size
+                    it falls back on finish size. The drills will be sorted from largest to smallest.</p>
+                <p><em>sortBy(&quot;ToolASC&quot;,@drillTools) </em></p>
+                <p>Returns a sorted list of drill tools by tool number in ascending order. Note tool numbers are
                     sometimes
                     arbitrary, but
                     this will be the same order as drill tools manager.</p>
-                <p><em>sortBy(&quot;ToolDSC&quot;,@drillTools) </em>
-                    Returns a sorted list of drill tools by count in descending order. Note tool numbers are sometimes
+                <p><em>sortBy(&quot;ToolDSC&quot;,@drillTools) </em></p>
+                <p>Returns a sorted list of drill tools by count in descending order. Note tool numbers are
+                    sometimes
                     arbitrary, but
                     this will be the same order as drill tools manager.</p>
-                <p><em>sortBy(&quot;Descending&quot;,@drillTools) </em>
-                    Returns a sorted list of drill tools from largest to smallest i.e. reverse sort.</p>
-                <p>See SYNOPSIS for detailed usage.</p>
             </dd>
         </dl>
         <p>
@@ -153,7 +150,7 @@
         <hr/>
         <h1><a name="dependencies">DEPENDENCIES</a></h1>
         <p>Carp</p>
-        <p>AbstractSorter</p>
+        <p><a class="text-info" href="abstract_sorter.html" target="_blank">AbstractSorter</a></p>
         <p>Data::Dumper</p>
         <p>
         </p>
@@ -162,8 +159,12 @@
         <p>Matthew Bundy</p>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

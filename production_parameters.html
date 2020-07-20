@@ -24,9 +24,11 @@
             This is designed to use Protech inc.'s default values, and many of the methods do this in the background. It
             should be kept in mind that the method names might be deceiving. The set methods don't actually set anything
             in genesis, they only set the instance variables in the ProductionParameters object. To pass the values to
-            genesis use the <strong>execute()</strong> function. Additionally, after the execute function is called, by
+            genesis use the <a class="text-info" href="#execute-func">execute()</a> function. Additionally, after the
+                    execute function is called, by
             default it will reset the default values (for example x and y stretch will be set back to 100.0). If this is
-            not desired call the <strong>resetAfter(0)</strong> function with the 0 passed in.</p>
+            not desired call the
+            <a class="text-info" href="#resetafter-func">resetAfter(0)</a> function with the 0 passed in.</p>
 
         <hr/>
 
@@ -84,7 +86,7 @@
 
             <dd>
                 <p><em>new(JOB_MOD =&gt; $obj)</em></p>
-                <p>Requires a <strong>Job</strong> object as a parameter.
+                <p>Requires a <a class="text-info" href="job_doc.html" target="_blank">Job</a> object as a parameter.
                     Returns a new ProductionParameters object.</p>
             </dd>
             <dt><strong><a name="setlayer" class="item"><code>setLayer</code></a></strong></dt>
@@ -105,7 +107,7 @@
                     the x and
                     y stretch instance variables.</p>
             </dd>
-            <dt><strong><a name="execute" class="item"><code>execute</code></a></strong></dt>
+            <dt><strong><a id="execute-func" name="execute" class="item"><code>execute</code></a></strong></dt>
 
             <dd>
                 <p><em>execute()</em></p>
@@ -114,18 +116,18 @@
                     variables to genesis.
                     By default, after called, the instance variables will be reset to their default values. If this is
                     not
-                    desired call <strong>resetAfter(0)</strong>
+                    desired call <a class="text-info" href="#resetafter-func">resetAfter(0)</a>
                     before execution.</p>
             </dd>
-            <dt><strong><a name="resetafter" class="item"><code>resetAfter</code></a></strong></dt>
+            <dt><strong><a id="resetafter-func" name="resetafter" class="item"><code>resetAfter</code></a></strong></dt>
 
             <dd>
                 <p><em>resetAfter(1|0)</em></p>
                 <p>Takes one boolean parameter, either <strong>1</strong> or <strong>0</strong>. If 1, then after the
-                    <strong>execute()</strong>
+                    <a class="text-info" href="#execute-func">execute()</a>
                     function is called, all default values will be
                     reset. If 0, then the values of instance variables will be unchanged after
-                    <strong>execute()</strong> is
+                    <a class="text-info" href="#execute-func">execute()</a> is
                     called.</p>
             </dd>
             <dt><strong><a name="printvariables" class="item"><code>printVariables</code></a></strong></dt>
