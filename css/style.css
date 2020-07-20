@@ -15,6 +15,10 @@ pre {
     word-wrap: break-word;
 }
 
+#filter-icon {
+    padding-left: 1em;
+}
+
 .wrapper {
     display: flex;
     width: 100%;
