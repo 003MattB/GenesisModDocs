@@ -240,9 +240,31 @@
             <dt><strong><a name="deletestep" class="item"><code>deleteStep</code></a></strong></dt>
 
             <dd>
-                <p><em>deleteLayer('step_name')</em></p>
+                <p><em>deleteStep('step_name')</em></p>
                 <p>Takes the parameter <strong>'step_name'</strong>, and removes the step from the matrix. Returns
                     nothing.</p>
+            </dd>
+
+            <dt><strong><a name="movelayer" class="item"><code>moveLayer</code></a></strong></dt>
+
+            <dd>
+                <p><em>moveLayer(NAME =&gt;'layer_name', LOC =&gt; 'above|below', REF =&gt;
+                    'existing_layer_name', ROW =&gt; row_number)</em></p>
+                <p>Used the same way as <a class="text-secondary" href="#addlayer">addLayer()</a>, moveLayer() will
+                    move a layer in the
+                    matrix in reference to another layer or a given row number.</p>
+                <p>It returns the moved Layer.</p>
+            </dd>
+
+            <dt><strong><a name="movestep" class="item"><code>moveStep</code></a></strong></dt>
+
+            <dd>
+                <p><em>moveStep(NAME =&gt;'step_name', LOC =&gt; 'left|right', REF =&gt;
+                    'existing_step_name', COL =&gt; column_number)</em></p>
+                <p>Used the same way as <a class="text-secondary" href="#addstep">addStep()</a>, moveStep() will move a step in the
+                    matrix in reference to another step or a given column number.
+                </p>
+                <p>It returns the moved step.</p>
             </dd>
         </dl>
         <p>
